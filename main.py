@@ -16,6 +16,8 @@ try:
     import readline # parses arrow-up / arrow-down on input in console
 except ImportError:
     pass
+from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
+from notes import NoteBook
 
 def parse_input(user_input):
 
@@ -25,7 +27,8 @@ def parse_input(user_input):
 
 
 def main():
-    book, notebook = load_data()
+    book = load_data()
+    notebook = NoteBook()
     print("Welcome to the assistant bot!")
     try:
 
@@ -45,6 +48,18 @@ def main():
             elif command == "help":
                 print(show_all_commands())
 
+            # notes
+            elif command == "add-note":
+                print(add_note(args,notebook))
+            elif command == "notes":
+                print(show_notes(args, notebook))
+            elif command == "search-note":
+                print(search_notes(args, notebook))
+            elif command == "edit-note":
+                print(edit_note(args,notebook))
+            elif command == "delete-note":
+                print(delete_note(args,notebook))
+            
             else:
                 print(execute_command(command, args, book, notebook))
 
