@@ -1,18 +1,6 @@
 from address_book import Record, AddressBook
+from decorators import input_error
 
-# decorator function
-def input_error(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError as e:
-            return str(e)
-        except KeyError as e:
-            return str(e)
-
-    #  except Exception:
-    #      return "Something went wrong"
-    return wrapper
 
 
 # functions layer between the user and the classes
