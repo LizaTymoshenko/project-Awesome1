@@ -2,7 +2,8 @@
 from field_handlers import add_address, add_email, edit_contact
 from storage import save_data, load_data
 from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact
-
+from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
+from notes import NoteBook
 
 def parse_input(user_input):
 
@@ -15,6 +16,7 @@ def parse_input(user_input):
 
 def main():
     book = load_data()
+    notebook = NoteBook()
     print("Welcome to the assistant bot!")
     try:
 
@@ -64,7 +66,18 @@ def main():
 
             elif command == "delete":
                 print(delete_contact(args,book))
-
+            # notes
+            elif command == "add-note":
+                print(add_note(args,notebook))
+            elif command == "notes":
+                print(show_notes(args, notebook))
+            elif command == "search-note":
+                print(search_notes(args, notebook))
+            elif command == "edit-note":
+                print(edit_note(args,notebook))
+            elif command == "delete-note":
+                print(delete_note(args,notebook))
+            
             else:
                 print("Invalid command.")
     finally:
