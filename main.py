@@ -27,7 +27,8 @@ def parse_input(user_input):
 
 
 def main():
-    book, notebook = load_data()
+    book = load_data()
+    notebook = NoteBook()
     print("Welcome to the assistant bot!")
     try:
 
