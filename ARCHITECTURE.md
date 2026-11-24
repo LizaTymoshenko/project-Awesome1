@@ -1,25 +1,24 @@
-# Архітектура проєкту
+# Архітектура
 
-**Це не готовий код** — лише угода команди. Структура **плоска**, основа — PR з `address_book.py`, `contact_handlers.py`, `storage.py`. Кожен блок створює і розширює **свої** файли за цим планом.
+Консольний помічник: книга контактів і нотатки, дані зберігаються на диску між запусками.
 
-## Структура репо (цільова)
+## Структура
 
 ```
 project-Awesome1/
-├── main.py                 # цикл, parse_input, злиття словників команд, load/save
-├── decorators.py           # input_error
+├── main.py                 # цикл команд, parse_input, злиття словників команд, load/save
+├── decorators.py           # input_error: помилки вводу → повідомлення користувачу
 ├── address_book.py         # Field, Name, Phone, Birthday, Record, AddressBook
 ├── contact_handlers.py     # add, change, phone, delete, all, add-birthday, show-birthday, birthdays
-├── storage.py              # A: Path.home()/.personal_assistant (US-02)
-├── notes.py                # A: Note, NoteBook
-├── note_handlers.py        # A: add-note, notes, search-note, …
-├── field_handlers.py       # B: add-address, add-email, edit
-├── validators.py           # B: validate_email, validate_phone
-├── search_handlers.py      # C: search, remove-phone, birthdays [N]
-├── suggest.py              # D: US-13 difflib
-├── CONTRACT.md
-├── ARCHITECTURE.md
-└── README.md
+├── field_handlers.py       # add-address, add-email, edit
+├── search_handlers.py      # search, remove-phone, birthdays [N]
+├── validators.py           # validate_email
+├── notes.py                # Note, NoteBook
+├── note_handlers.py        # add-note, notes, search-note, edit-note, delete-note, add-tag, search-tag, sort-notes
+├── console.py              # render_table: кольорові таблиці (rich)
+├── storage.py              # збереження і завантаження даних
+├── suggest.py              # підказка найближчої команди (difflib)
+└── requirements.txt        # rich
 ```
 
 ## Потік даних
@@ -30,16 +29,20 @@ main → load_data() → (AddressBook, NoteBook)
      → save_data() на exit / Ctrl+C
 ```
 
-`COMMANDS` збирається в `main.py` зі словників модулів: `{**CONTACT_COMMANDS, **NOTE_COMMANDS, ...}`.
+## Команди
 
-## Порядок роботи
+Кожен модуль з обробниками має словник `команда → функція`; `main.py` зливає їх у `COMMANDS`. Обробник має єдину сигнатуру `handler(args, book, notebook) -> str`: він повертає рядок, а виводить його лише цикл у `main.py`. Помилки вводу (`ValueError`, `KeyError`) обробляє декоратор `@input_error`.
 
-1. **Основа (PR #2):** `address_book.py`, `contact_handlers.py`, `storage.py`, `main.py` + реєстр словниками і єдина сигнатура `handler(args, book, notebook)`. Після мержа решта стартує.
-2. **Паралельно:** кожен блок створює **тільки свої** файли за таблицею в `CONTRACT.md` + один імпорт і один `**` у `main.py`.
-3. Кожна US-картка = своя гілка (`feature/us-03-address`) і свій PR.
-4. US-02 робить власник блоку A разом з нотатками; імена класів з `CONTRACT.md` не змінювати.
+## Дані
 
-## Гілки
+- `AddressBook` — словник `імʼя → Record`; `Record` містить `name`, `phones`, `birthday`, `email`, `address`.
+- `NoteBook` — нотатки з унікальним `id`, текстом і тегами; не залежить від `AddressBook`.
+- Збереження: `pickle` кортежу `(AddressBook, NoteBook)` у `Path.home()/.personal_assistant/assistant.pkl`; папка створюється автоматично, за відсутності файлу створюються порожні книги.
 
-- `main` — стабільна інтеграція (захищена)
-- `feature/назва` / `bugfix/назва` — одна картка Trello = одна гілка
+## Вивід
+
+Таблиці будує `console.render_table(title, columns, rows)`: вона повертає рядок, тому обробники команд лишаються чистими функціями. Колонки й кольори задає кожен обробник.
+
+## Залежності
+
+Python 3.12+, `rich` (див. `requirements.txt`).
