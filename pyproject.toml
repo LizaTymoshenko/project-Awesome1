@@ -1,0 +1,27 @@
+[project]
+name = "personal-assistant"
+version = "0.0.0"
+description = "Персональний помічник — командний проєкт Neoversity (group-4)"
+readme = "README.md"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+src = ["personal_assistant", "main.py"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+]
+ignore = ["E501"]  # довжина рядка — на розсуд команди
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
