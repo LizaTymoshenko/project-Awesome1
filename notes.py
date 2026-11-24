@@ -65,6 +65,10 @@ class NoteBook(UserDict):
         self.find_note(note_id)
         del self.data[note_id]
 
+    def get_all_notes(self) -> list[Note]:
+        return list(self.data.values())
+       
+
 
 
     
