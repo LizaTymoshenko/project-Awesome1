@@ -12,8 +12,9 @@ def add_address(args, book: AddressBook):
     if record is None:
         raise ValueError(f"Contact {name} not found")
 
+    action = "updated" if record.address else "added"
     record.add_address(" ".join(address_parts))
-    return "Address added"
+    return f"Address {action}"
 
 
 @input_error
@@ -26,5 +27,6 @@ def add_email(args, book: AddressBook):
     if record is None:
         raise ValueError(f"Contact {name} not found")
 
+    action = "updated" if record.email else "added"
     record.add_email(email)
-    return "Email added"
+    return f"Email {action}"

@@ -93,7 +93,11 @@ class Record:
         )
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        phones = ", ".join(str(phone) for phone in self.phones) or "-"
+        return (
+            f"{self.name} | phones: {phones} | email: {self.email or '-'}"
+            f" | address: {self.address or '-'} | birthday: {self.birthday or '-'}"
+        )
 
     # NEW
     def add_birthday(self, birthday):
