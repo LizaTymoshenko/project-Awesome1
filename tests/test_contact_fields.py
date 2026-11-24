@@ -131,3 +131,14 @@ def test_edit_unknown_field_and_contact(book):
 
 def test_edit_with_missing_arguments_shows_format(book):
     assert "Correct format" in edit_contact(["Bob"], book)
+
+
+# console.render_table is shared by contacts and (later) notes
+
+def test_render_table_shows_title_headers_and_cells():
+    from console import render_table
+
+    table = render_table("Notes", [("ID", "cyan"), ("Text", "")], [["1", "Buy milk"], ["2", "Call Bob"]])
+
+    for part in ["Notes", "ID", "Text", "Buy milk", "Call Bob"]:
+        assert part in table
