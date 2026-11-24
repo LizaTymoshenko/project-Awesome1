@@ -53,6 +53,8 @@ NOTE_COMMANDS = {
 | `note_handlers.py` | A | `add-note`, `notes`, `search-note`, `edit-note`, `delete-note`, `add-tag`, `search-tag`, `sort-notes` |
 | `field_handlers.py` | B | `add-address`, `add-email`, `edit` |
 | `validators.py` | B | `validate_email`, `validate_phone` |
+| `console.py` | спільне | `render_table(title, columns, rows) -> str` — кольорові таблиці `rich`; обробник сам задає колонки, повертає рядок |
+| `tests/` | спільне | `pytest`, запуск `python -m pytest` |
 | `search_handlers.py` | C | `search`, `remove-phone`, `birthdays [N]` |
 | `suggest.py` | D | US-13 `difflib` |
 
