@@ -1,4 +1,5 @@
 from address_book import Record, AddressBook
+from console import render_contacts_table
 from decorators import input_error
 
 
@@ -60,7 +61,7 @@ def show_phone(args, book):
 def show_all_contacts(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
-    return "\n".join(str(record) for record in book.data.values())
+    return render_contacts_table(book.data.values())
 
 
 @input_error
