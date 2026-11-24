@@ -2,6 +2,8 @@ from collections import UserDict
 from datetime import datetime, timedelta
 import calendar
 
+from validators import validate_email
+
 class Field:
     def __init__(self, value):
         self.value = value
@@ -80,7 +82,7 @@ class Record:
 
 
     def add_email(self, email: str):
-        self.email = email
+        self.email = validate_email(email)
 
     def add_address(self, address: str):
         self.address = address
