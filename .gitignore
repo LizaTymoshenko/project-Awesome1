@@ -1,5 +1,10 @@
 *.pkl
 __pycache__/
-.python-version
-pyproject.toml
-uv.lock
+*.py[cod]
+.venv/
+.env
+.idea/
+.vscode/
+.personal_assistant/
+*.pkl
+.DS_Store
