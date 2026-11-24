@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 Домовитись на **US-00a**:
 
-- хто веде `console.py` або стиль виводу в `cli.py` (зазвичай блок **D**);
+- хто веде стиль виводу (один модуль `console.py` або функція в `main.py`);
 - команди все одно **повертають `str`**, а Rich використовується в одному місці при `print` (щоб блоки A/B/C не ламали одне одного).
 
 Опційно: `pip install -r requirements-dev.txt` → `pytest`, `ruff`.
@@ -59,10 +59,11 @@ pip install -r requirements.txt
 
 | Хто | Що з'являється в `main` першим |
 |-----|----------------------------------|
-| **D** | `cli.py`, `main.py`, потім `storage.py` |
-| **A** | `notes.py`, `notes_commands.py` |
-| **B** | `contacts_*`, `validators.py` |
-| **C** | `search.py` |
+| **основа** | `main.py`, `address_book.py`, `contact_handlers.py`, `storage.py` (PR #2) |
+| **A** | `notes.py`, `note_handlers.py`, потім `storage.py` (Path.home) |
+| **B** | `field_handlers.py`, `validators.py` |
+| **C** | `search_handlers.py` |
+| **D** | `suggest.py` |
 
 ## Запуск (коли з'явиться `main.py`)
 
