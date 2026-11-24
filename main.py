@@ -17,6 +17,9 @@ try:
 except ImportError:
     pass
 
+from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
+from notes import NoteBook
+
 def parse_input(user_input):
 
     command, *args = user_input.split()
@@ -48,6 +51,18 @@ def main():
             elif command == "search":
                 print(search_contacts(args, book))
 
+            # notes
+            elif command == "add-note":
+                print(add_note(args,notebook))
+            elif command == "notes":
+                print(show_notes(args, notebook))
+            elif command == "search-note":
+                print(search_notes(args, notebook))
+            elif command == "edit-note":
+                print(edit_note(args,notebook))
+            elif command == "delete-note":
+                print(delete_note(args,notebook))
+            
             else:
                 print(execute_command(command, args, book))
 
