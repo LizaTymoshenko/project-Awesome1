@@ -9,7 +9,7 @@
 3. Кожен обирає блок A / B / C / D у Trello і працює у **своїх** файлах (таблиця в `CONTRACT.md`).
 4. Усім **однаково** налаштувати середовище (нижче).
 
-> У репозиторії **немає готового коду** — лише документація та конфіги. Файли з [ARCHITECTURE.md](./ARCHITECTURE.md) створює кожен у **своєму** блоці за [CONTRACT.md](./CONTRACT.md).
+> Основа бота вже в `main`: `main.py`, `address_book.py`, `contact_handlers.py`, `storage.py`. Решту файлів з [ARCHITECTURE.md](./ARCHITECTURE.md) створює кожен у **своєму** блоці за [CONTRACT.md](./CONTRACT.md).
 
 ## Середовище (`.venv` + `pip`)
 
@@ -55,17 +55,17 @@ pip install -r requirements.txt
 
 **Не комітити** `.venv/` — він у `.gitignore`.
 
-## Мінімум після US-00a
+## Хто що додає
 
-| Хто | Що з'являється в `main` першим |
-|-----|----------------------------------|
-| **основа** | `main.py`, `address_book.py`, `contact_handlers.py`, `storage.py` (PR #2) |
+| Хто | Файли |
+|-----|-------|
+| **основа (вже в `main`)** | `main.py`, `address_book.py`, `contact_handlers.py`, `decorators.py`, `storage.py` |
+| **B** | `field_handlers.py`, `validators.py`, `console.py` (таблиці) |
 | **A** | `notes.py`, `note_handlers.py`, потім `storage.py` (Path.home) |
-| **B** | `field_handlers.py`, `validators.py` |
 | **C** | `search_handlers.py` |
 | **D** | `suggest.py` |
 
-## Запуск (коли з'явиться `main.py`)
+## Запуск
 
 ```bash
 python3 main.py
