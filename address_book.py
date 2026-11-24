@@ -115,6 +115,12 @@ class AddressBook(UserDict):
     def find(self, name):
         return self.data.get(name)
 
+    def get(self, name):
+        record = self.data.get(name)
+        if record is None:
+            raise ValueError(f"Contact {name} not found")
+        return record
+
     def delete(self, name):
         if self.data.get(name) is not None:
             self.data.pop(name)

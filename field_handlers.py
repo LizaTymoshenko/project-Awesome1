@@ -8,9 +8,7 @@ def add_address(args, book: AddressBook):
         raise ValueError("Correct format: add-address [Contact name] [address]")
 
     name, *address_parts = args
-    record = book.find(name)
-    if record is None:
-        raise ValueError(f"Contact {name} not found")
+    record = book.get(name)
 
     action = "updated" if record.address else "added"
     record.add_address(" ".join(address_parts))
@@ -23,9 +21,7 @@ def add_email(args, book: AddressBook):
         raise ValueError("Correct format: add-email [Contact name] [email]")
 
     name, email = args
-    record = book.find(name)
-    if record is None:
-        raise ValueError(f"Contact {name} not found")
+    record = book.get(name)
 
     action = "updated" if record.email else "added"
     record.add_email(email)
