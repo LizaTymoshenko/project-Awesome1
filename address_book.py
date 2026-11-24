@@ -43,6 +43,10 @@ class Phone(Field):
 
 
 class Record:
+    # class-level defaults so records pickled before these fields existed still load
+    email = None
+    address = None
+
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
@@ -74,6 +78,12 @@ class Record:
             raise ValueError(f"Phone {new_phone} already exists")
         self.phones[self.phones.index(old)] = new
 
+
+    def add_email(self, email: str):
+        self.email = email
+
+    def add_address(self, address: str):
+        self.address = address
 
     def find_phone(self, phone: str):
         return (

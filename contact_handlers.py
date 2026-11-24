@@ -66,10 +66,14 @@ def show_phone(args, book):
 def show_all_contacts(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
-    result = ""
+    lines = []
     for record in book.data.values():
-        result += f"{record.name} {', '.join(str(phone) for phone in record.phones)}\n"
-    return result
+        phones = ", ".join(str(phone) for phone in record.phones) or "-"
+        lines.append(
+            f"{record.name} | phones: {phones} | email: {record.email or '-'}"
+            f" | address: {record.address or '-'} | birthday: {record.birthday or '-'}"
+        )
+    return "\n".join(lines)
 
 
 @input_error
