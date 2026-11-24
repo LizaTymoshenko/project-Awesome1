@@ -1,81 +1,52 @@
-# project-Awesome1 — Персональний помічник (group-4)
+# Персональний помічник
 
-Команда: Neoversity · дошка Trello **Personal Assistant group-4**.
+Консольний бот: книга контактів і нотатки. Дані зберігаються на диску, тож бота можна перезапускати без втрати даних. Структура модулів і потік даних описані в [ARCHITECTURE.md](./ARCHITECTURE.md).
 
-## Старт проєкту
+## Встановлення і запуск
 
-1. Прочитати **[CONTRACT.md](./CONTRACT.md)** — обов'язкові інтерфейси.
-2. Прочитати **[ARCHITECTURE.md](./ARCHITECTURE.md)** — структура модулів, потік даних, формат збереження.
-3. Кожен обирає блок A / B / C / D у Trello і працює у **своїх** файлах (таблиця в `CONTRACT.md`).
-4. Усім **однаково** налаштувати середовище (нижче).
-
-> Основа бота вже в `main`: `main.py`, `address_book.py`, `contact_handlers.py`, `storage.py`. Решту файлів з [ARCHITECTURE.md](./ARCHITECTURE.md) створює кожен у **своєму** блоці за [CONTRACT.md](./CONTRACT.md).
-
-## Середовище (`.venv` + `pip`)
-
-На **US-00a** зафіксуйте версію Python (у репо є `.python-version` — зараз `3.12`; можна змінити на `3.14`, якщо всім зручно).
-
-**macOS / Linux:**
+Потрібен Python 3.12+.
 
 ```bash
-cd project-Awesome1
 python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -U pip
+source .venv/bin/activate        # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-```
-
-**Windows (PowerShell):**
-
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -U pip
-pip install -r requirements.txt
-```
-
-| Файл | Що встановлюється |
-|------|-------------------|
-| `requirements.txt` | **`rich`** — гарний вивід у консоль (кольори, таблиці, панелі). |
-| `requirements-dev.txt` | Опційно: `pytest`, `ruff`. |
-
-Усі ставлять **`pip install -r requirements.txt`**, щоб `rich` був у кожного.
-
-### Rich — «красива консоль»
-
-**[Rich](https://github.com/Textualize/rich)** — бібліотека для CLI: кольоровий текст, таблиці контактів, рамки з помилками.  
-**Не обов’язково для ТЗ** (можна лишити `print`), але ментори дозволяють.
-
-Домовитись на **US-00a**:
-
-- хто веде стиль виводу (один модуль `console.py` або функція в `main.py`);
-- команди все одно **повертають `str`**, а Rich використовується в одному місці при `print` (щоб блоки A/B/C не ламали одне одного).
-
-Опційно: `pip install -r requirements-dev.txt` → `pytest`, `ruff`.
-
-**Не комітити** `.venv/` — він у `.gitignore`.
-
-## Хто що додає
-
-| Хто | Файли |
-|-----|-------|
-| **основа (вже в `main`)** | `main.py`, `address_book.py`, `contact_handlers.py`, `decorators.py`, `storage.py` |
-| **B** | `field_handlers.py`, `validators.py`, `console.py` (таблиці) |
-| **A** | `notes.py`, `note_handlers.py`, потім `storage.py` (Path.home) |
-| **C** | `search_handlers.py` |
-| **D** | `suggest.py` |
-
-## Запуск
-
-```bash
 python3 main.py
 ```
 
-## Корисні посилання
+`requirements.txt` ставить `rich` (кольорові таблиці). Для тестів і лінтера: `pip install -r requirements-dev.txt`, запуск `python -m pytest`.
 
-- ТЗ (Google Sheets) — чек-лист на картці **Фінал** у Trello
-- User stories — картки US-01 … US-13
+## Команди
 
-## Ліцензія / здача
+| Команда | Що робить |
+|---------|-----------|
+| `add [імʼя] [телефон]` | створює контакт або додає телефон |
+| `change [імʼя] [старий] [новий]` | змінює телефон |
+| `phone [імʼя]` | показує телефони контакту |
+| `delete [імʼя]` | видаляє контакт |
+| `all` | показує всі контакти таблицею |
+| `add-address [імʼя] [адреса]` | додає адресу |
+| `add-email [імʼя] [email]` | додає email (формат перевіряється) |
+| `edit [імʼя] [name\|address\|email\|birthday] [значення]` | змінює поле контакту |
+| `add-birthday [імʼя] DD.MM.YYYY` | додає день народження |
+| `show-birthday [імʼя]` | показує день народження |
+| `birthdays` | дні народження найближчого тижня |
+| `hello`, `exit` / `close` | привітання, вихід із збереженням |
 
-Перед здачею — прогін чек-лістів «ТЗ: основні / додаткові» на картці **Фінал**.
+## Як додати команду
+
+Обробник має єдину сигнатуру і **повертає рядок**: друкує його лише цикл у `main.py`.
+
+```python
+@input_error
+def my_command(args: list[str], book: AddressBook) -> str:
+    ...
+    return "Готово"
+```
+
+- `args` — аргументи без імені команди.
+- `@input_error` (`decorators.py`) перетворює `ValueError` і `KeyError` на повідомлення користувачу.
+- Команда підключається в `main.py`. Для таблиць використовуйте `console.render_table(title, columns, rows)`: вона повертає рядок.
+
+## Дані
+
+Контакти зберігаються через `pickle` (`storage.py`). Поля контакту: `name`, `phones`, `email`, `address`, `birthday`. Нові поля додавайте зі значенням за замовчуванням `None`, щоб раніше збережені дані продовжували завантажуватись.
