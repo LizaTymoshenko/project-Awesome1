@@ -131,7 +131,7 @@ class AddressBook(UserDict):
         return "\n".join(str(record) for record in self.data.values())
 
     def rename(self, old_name, new_name):
-        record = self.get(old_name)
+        record = self.find(old_name)
         if new_name == old_name:
             return
         if new_name in self.data:
