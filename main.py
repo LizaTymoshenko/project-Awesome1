@@ -45,6 +45,9 @@ def main():
             elif command == "help":
                 print(show_all_commands())
 
+            elif command == "search":
+                print(search_contacts(args, book))
+
             else:
                 print("Invalid command.")
     except (KeyboardInterrupt, EOFError):
