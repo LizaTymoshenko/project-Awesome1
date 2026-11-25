@@ -45,7 +45,8 @@ class Phone(Field):
 
 
 class Record:
-    # class-level defaults so records pickled before these fields existed still load
+    # class-level defaults only keep records pickled before these fields existed loadable;
+    # new records get real instance attributes in __init__
     email = None
     address = None
 
@@ -53,6 +54,8 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
 
     # adds a phone after checking if the phone already exists
     def add_phone(self, phone: str):
@@ -115,19 +118,17 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
 
     def find(self, name):
-        return self.data.get(name)
-
-    def get(self, name):
         record = self.data.get(name)
         if record is None:
             raise ValueError(f"Contact {name} not found")
         return record
 
     def delete(self, name):
-        if self.data.get(name) is not None:
-            self.data.pop(name)
-        else:
-            raise ValueError(f"Contact {name} not found")
+        self.find(name)  # raises if the contact does not exist
+        self.data.pop(name)
+
+    def show_all(self):
+        return "\n".join(str(record) for record in self.data.values())
 
     def is_empty(self):
         return True if self.data == {} else False
