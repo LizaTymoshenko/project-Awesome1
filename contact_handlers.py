@@ -1,6 +1,6 @@
 from address_book import Record, AddressBook
 from decorators import input_error
-
+from console import render_contacts_table
 
 
 # functions layer between the user and the classes
@@ -98,3 +98,12 @@ def show_upcoming_birthdays(args, book: AddressBook):
         result += f"{user['name']}: {user['congratulation_date']}\n"
     return result
 
+@input_error
+def search_contacts(args, book: AddressBook):
+    if len(args) < 1:
+        raise ValueError("Correct format: search [name, phone, e-mail]")
+    query = " ".join(args)
+    found = book.search(query)
+    if not found:
+        return "Nothing found"
+    return render_contacts_table(found)

@@ -1,7 +1,7 @@
 
 from field_handlers import add_address, add_email, edit_contact
 from storage import save_data, load_data
-from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact
+from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact, search_contacts
 
 
 def parse_input(user_input):
@@ -64,6 +64,9 @@ def main():
 
             elif command == "delete":
                 print(delete_contact(args,book))
+
+            elif command == "search":
+                print(search_contacts(args, book))
 
             else:
                 print("Invalid command.")
