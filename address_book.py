@@ -2,6 +2,7 @@ from collections import UserDict
 from datetime import datetime, timedelta
 import calendar
 
+from console import render_contacts_table
 from validators import validate_email
 
 class Field:
@@ -128,7 +129,7 @@ class AddressBook(UserDict):
         self.data.pop(name)
 
     def show_all(self):
-        return "\n".join(str(record) for record in self.data.values())
+        return render_contacts_table(self.data.values())
 
     def rename(self, old_name, new_name):
         record = self.find(old_name)

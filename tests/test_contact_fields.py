@@ -56,9 +56,12 @@ def test_all_shows_every_field(book):
         assert part in line
 
 
-def test_all_shows_dash_for_empty_fields(book):
-    line = show_all_contacts([], book)
-    assert "email: -" in line and "address: -" in line and "birthday: -" in line
+def test_all_has_a_column_per_field_and_dash_for_empty_values(book):
+    table = show_all_contacts([], book)
+
+    for header in ["Name", "Phones", "Email", "Address", "Birthday"]:
+        assert header in table
+    assert table.count("-") >= 3  # email, address, birthday are empty
 
 
 def test_record_saved_before_new_fields_still_loads():
@@ -128,6 +131,17 @@ def test_edit_unknown_field_and_contact(book):
 
 def test_edit_with_missing_arguments_shows_format(book):
     assert "Correct format" in edit_contact(["Bob"], book)
+
+
+# console.render_table is shared by contacts and (later) notes
+
+def test_render_table_shows_title_headers_and_cells():
+    from console import render_table
+
+    table = render_table("Notes", [("ID", "cyan"), ("Text", "")], [["1", "Buy milk"], ["2", "Call Bob"]])
+
+    for part in ["Notes", "ID", "Text", "Buy milk", "Call Bob"]:
+        assert part in table
 
 
 # AddressBook.find raises instead of returning None
