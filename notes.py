@@ -26,7 +26,7 @@ class Note:
 
     def __str__(self):
         tags = ', '.join(self.tags)
-        return f"{self.note_id} : {self.text}. tags: {tags if tags else 'No tags'}"
+        return f"{self.note_id} : {self.text} tags: {tags if tags else 'No tags'}"
     
     def __repr__(self):
         return f"id:{self.note_id}, text={self.text!r}, tags={self.tags}"
