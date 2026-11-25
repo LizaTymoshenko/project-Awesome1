@@ -19,10 +19,6 @@ class Note:
         if not validated_text:
             raise ValueError("Note is empty")
         self._text = validated_text
-            
-    # text is validated via setter
-    def edit_note(self, new_text: str):
-        self.text = new_text
 
     def __str__(self):
         tags = ', '.join(self.tags)
@@ -48,7 +44,7 @@ class NoteBook(UserDict):
     def find_note(self, note_id: int) -> Note:
         if note_id in self.data:
             return self.data[note_id]
-        raise ValueError("Note not found")
+        raise ValueError(f"Note {note_id} not found")
 
     def search(self, target_string: str) -> list[Note]:
         found_notes = []
@@ -59,7 +55,7 @@ class NoteBook(UserDict):
 
     def edit_note(self, note_id: int, new_text: str) -> None:
         target_note = self.find_note(note_id)
-        target_note.edit_note(new_text)
+        target_note.text = new_text
 
     def delete_note(self, note_id: int) -> None:
         self.find_note(note_id)
