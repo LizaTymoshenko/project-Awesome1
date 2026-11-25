@@ -1,12 +1,10 @@
-from collections import UserDict
+from collections import UserDict, defaultdict
 
 class Note:
     def __init__(self, note_id: int, text: str, tags: list[str] | None = None):
-        self.tags = []
         self.note_id = note_id
         self.text = text
-        if tags is not None:
-            self.tags.extend(tags)
+        self.tags = self.add_tags(tags)
 
 
     @property
@@ -23,9 +21,28 @@ class Note:
     def __str__(self):
         tags = ', '.join(self.tags)
         return f"{self.note_id} : {self.text} tags: {tags if tags else 'No tags'}"
-    
+
     def __repr__(self):
         return f"id:{self.note_id}, text={self.text!r}, tags={self.tags}"
+
+    @staticmethod
+    def normalize_tag(tag: str) -> str:
+        return tag.lower().strip()
+    
+    def add_tags(self, tags: list[str]) -> None:
+        for tag in tags:
+            normalized_tag = Note.normalize_tag(tag)
+            if normalized_tag and normalized_tag not in self.tags:
+                self.tags.append(normalized_tag)
+
+    def remove_tag(self, tag: str) -> None:
+        tag = Note.normalize_tag(tag)
+        if tag not in self.tags:
+            raise ValueError(f"Note {self.note_id} has no tag: {tag}")    
+        self.tags.remove(tag)
+
+
+
 
 # dict: key: id, value: note
 class NoteBook(UserDict):
@@ -47,10 +64,9 @@ class NoteBook(UserDict):
         raise ValueError(f"Note {note_id} not found")
 
     def search(self, target_string: str) -> list[Note]:
-        found_notes = []
-        for note in self.data.values():
-            if target_string.lower() in note.text.lower():
-                found_notes.append(note)
+        target_string = target_string.lower()
+        found_notes = [note for note in self.data.values()
+                       if target_string in note.text.lower()]
         return found_notes
 
     def edit_note(self, note_id: int, new_text: str) -> None:
@@ -63,8 +79,32 @@ class NoteBook(UserDict):
 
     def get_all_notes(self) -> list[Note]:
         return list(self.data.values())
-       
-
-
-
     
+    def add_tags(self, note_id: int, tags: list[str]) -> None:
+        note = self.find_note(note_id)
+        note.add_tags(tags)  
+
+    def remove_tag(self, note_id: int, tag: str) -> None:
+        note = self.find_note(note_id)
+        note.remove_tag(tag)  
+
+    def search_by_tag(self, tag: str) -> list[Note]:
+        tag = Note.normalize_tag(tag)
+        found_notes = [note for note in self.data.values() if tag in note.tags]
+        return found_notes
+
+    # returns a dict: key - tag name, value - list of notes that have this tag
+    # key: None - stores notes without tags
+    def sort_by_tag(self) -> dict[str | None, list[Note]]:
+        result = defaultdict(list)
+        for note in self.data.values():
+            if not note.tags:
+                result[None].append(note)
+                continue
+            for tag in note.tags:
+                result[tag].append(note)
+                   
+        
+
+
+
