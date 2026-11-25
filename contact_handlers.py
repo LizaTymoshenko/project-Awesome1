@@ -1,5 +1,4 @@
 from address_book import Record, AddressBook
-from console import render_contacts_table
 from decorators import input_error
 
 
@@ -11,16 +10,15 @@ def add_contact(args, book):
         raise ValueError("Correct format: add [Contact name] [phone number]")
 
     name, phone, *_ = args
-    record = book.find(name)
 
-    if record is None:
-        record = Record(name)
-        record.add_phone(phone)
-        book.add_record(record)
-        return "Contact added"
-    
+    if name in book:
+        book.find(name).add_phone(phone)
+        return "Contact updated"
+
+    record = Record(name)
     record.add_phone(phone)
-    return "Contact updated"
+    book.add_record(record)
+    return "Contact added"
 
 
 @input_error
@@ -40,7 +38,7 @@ def change_contact(args, book):
         raise ValueError("Correct format: change [Contact name] [Old phone] [Newphone]")
 
     name, old_phone, new_phone, *_ = args
-    record = book.get(name)
+    record = book.find(name)
 
     record.edit_phone(old_phone, new_phone)
     return "Contact updated"
@@ -52,7 +50,7 @@ def show_phone(args, book):
         raise ValueError("Correct format: phone [Contact name]")
 
     name, *_ = args
-    record = book.get(name)
+    record = book.find(name)
 
     return f"{record.name} {', '.join(str(phone) for phone in record.phones)}"
 
@@ -61,7 +59,7 @@ def show_phone(args, book):
 def show_all_contacts(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
-    return render_contacts_table(book.data.values())
+    return book.show_all()
 
 
 @input_error
@@ -69,7 +67,7 @@ def add_birthday(args, book: AddressBook):
     if len(args) < 2:
         raise ValueError("Correct format:  add-birthday [Contact name] DD.MM.YYYY in digits")
     name, birthday, *_ = args
-    record = book.get(name)
+    record = book.find(name)
 
     record.add_birthday(birthday)
     return "Birth date added"
@@ -80,7 +78,7 @@ def show_birthday(args, book):
     if len(args) != 1:
         raise ValueError("Correct format: show-birthday [Contact name] ")
     name, *_ = args
-    record = book.get(name)
+    record = book.find(name)
 
     if record.birthday is None:
         return "No information"

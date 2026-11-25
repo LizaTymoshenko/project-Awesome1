@@ -1,4 +1,4 @@
-from address_book import AddressBook
+from address_book import AddressBook, Record
 from decorators import input_error
 
 
@@ -8,7 +8,7 @@ def add_address(args, book: AddressBook):
         raise ValueError("Correct format: add-address [Contact name] [address]")
 
     name, *address_parts = args
-    record = book.get(name)
+    record = book.find(name)
 
     action = "updated" if record.address else "added"
     record.add_address(" ".join(address_parts))
@@ -21,19 +21,20 @@ def add_email(args, book: AddressBook):
         raise ValueError("Correct format: add-email [Contact name] [email]")
 
     name, email = args
-    record = book.get(name)
+    record = book.find(name)
 
     action = "updated" if record.email else "added"
     record.add_email(email)
     return f"Email {action}"
 
 
-EDITABLE_FIELDS = {
-    "name": lambda book, record, value: book.rename(record.name.value, value),
-    "address": lambda book, record, value: record.add_address(value),
-    "email": lambda book, record, value: record.add_email(value),
-    "birthday": lambda book, record, value: record.add_birthday(value),
+# setters that only need the record and the new value; "name" is handled by the book itself
+RECORD_SETTERS = {
+    "address": Record.add_address,
+    "email": Record.add_email,
+    "birthday": Record.add_birthday,
 }
+EDITABLE_FIELDS = ["name", *RECORD_SETTERS]
 
 
 @input_error
@@ -46,11 +47,12 @@ def edit_contact(args, book: AddressBook):
     if field not in EDITABLE_FIELDS:
         raise ValueError(f"Unknown field '{field}'. Use: {', '.join(EDITABLE_FIELDS)}")
 
-    # names are one word: a name with a space could never be typed as a command argument
-    if field == "name" and len(value_parts) != 1:
-        raise ValueError("Contact name must be a single word")
-
-    record = book.get(name)
-
-    EDITABLE_FIELDS[field](book, record, " ".join(value_parts))
+    value = " ".join(value_parts)
+    if field == "name":
+        # names are one word: a name with a space could never be typed as a command argument
+        if len(value_parts) != 1:
+            raise ValueError("Contact name must be a single word")
+        book.rename(name, value)
+    else:
+        RECORD_SETTERS[field](book.find(name), value)
     return f"Contact {field} updated"

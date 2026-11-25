@@ -89,7 +89,7 @@ def test_invalid_email_is_not_saved_on_edit(book):
 
 def test_edit_name_moves_record_to_new_key(book):
     assert edit_contact(["Bob", "name", "Robert"], book) == "Contact name updated"
-    assert book.find("Bob") is None
+    assert "Bob" not in book
     assert str(book.find("Robert").name) == "Robert"
     assert [str(p) for p in book.find("Robert").phones] == ["0501112233"]
 
@@ -97,12 +97,12 @@ def test_edit_name_moves_record_to_new_key(book):
 def test_edit_name_to_existing_contact_is_rejected(book):
     book.add_record(Record("Ann"))
     assert edit_contact(["Bob", "name", "Ann"], book) == "Contact Ann already exists"
-    assert book.find("Bob") is not None
+    assert "Bob" in book
 
 
 def test_edit_name_must_be_single_word(book):
     assert "single word" in edit_contact(["Bob", "name", "Anna", "Maria"], book)
-    assert book.find("Bob") is not None
+    assert "Bob" in book
 
 
 def test_edit_address_and_email(book):
@@ -142,3 +142,12 @@ def test_render_table_shows_title_headers_and_cells():
 
     for part in ["Notes", "ID", "Text", "Buy milk", "Call Bob"]:
         assert part in table
+
+
+# AddressBook.find raises instead of returning None
+
+def test_find_and_delete_unknown_contact_raise(book):
+    with pytest.raises(ValueError, match="Contact Nobody not found"):
+        book.find("Nobody")
+    with pytest.raises(ValueError, match="Contact Nobody not found"):
+        book.delete("Nobody")
