@@ -130,6 +130,16 @@ class AddressBook(UserDict):
     def show_all(self):
         return "\n".join(str(record) for record in self.data.values())
 
+    def rename(self, old_name, new_name):
+        record = self.find(old_name)
+        if new_name == old_name:
+            return
+        if new_name in self.data:
+            raise ValueError(f"Contact {new_name} already exists")
+        del self.data[old_name]
+        record.name = Name(new_name)
+        self.data[new_name] = record
+
     def is_empty(self):
         return True if self.data == {} else False
 
