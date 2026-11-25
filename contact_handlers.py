@@ -3,8 +3,6 @@ from decorators import input_error
 from console import render_contacts_table
 from command_registry import CommandFormatError
 from console import render_contacts_table
-from command_registry import CommandFormatError
-from console import render_contacts_table
 
 
 # functions layer between the user and the classes
