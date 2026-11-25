@@ -78,6 +78,9 @@ def main():
             elif command == "help":
                 print(show_all_commands())
 
+            elif command == "search":
+                print(search_contacts(args, book))
+
             else:
                 print(execute_command(command, args, book))
 
