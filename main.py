@@ -2,7 +2,7 @@
 from field_handlers import add_address, add_email, edit_contact
 from storage import save_data, load_data
 from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact
-
+import readline # parses arrow-up / arrow-down on input in console
 
 def parse_input(user_input):
 

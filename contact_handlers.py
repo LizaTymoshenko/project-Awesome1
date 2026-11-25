@@ -89,8 +89,11 @@ def show_birthday(args, book):
 def show_upcoming_birthdays(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
-
-    upcoming = book.get_upcoming_birthdays()
+    if len(args) > 0:
+        n_days, *_ = args
+        upcoming = book.get_upcoming_birthdays(n_days)
+    else:
+        upcoming = book.get_upcoming_birthdays()
     if not upcoming:
         return "No birthdays next week"
     result = ""

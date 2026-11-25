@@ -22,7 +22,7 @@ class Name(Field):
 class Birthday(Field):
     def __init__(self, value):
         try:
-            birth_date = datetime.strptime(value, "%d.%m.%Y")
+            birth_date = datetime.strptime(value, "%d.%m.%Y").date() # for correct representation as date
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
         super().__init__(birth_date)
@@ -108,9 +108,12 @@ class Record:
     # NEW
     def add_birthday(self, birthday):
         birth_date = Birthday(birthday)
-        if birth_date.value > datetime.today():
+        if birth_date.value > datetime.today().date():
             raise ValueError("Birthday date cannot be in the future")
         self.birthday = birth_date
+
+    def get_birthday(self):
+        return self.birthday.value if self.birthday else None
 
 
 class AddressBook(UserDict):
@@ -146,19 +149,22 @@ class AddressBook(UserDict):
 
     # NEW
     # returns list of dict of users that should be congratulated with bd within upcoming week
-    def get_upcoming_birthdays(self):
+    def get_upcoming_birthdays(self, n_days: int = 7):
+        # check if n_days if positive integer
+        try:
+            n_days = int(n_days)
+            assert n_days > 0
+        except:
+            raise ValueError("Number of days should be positive integer.")
 
-        today = datetime.today()
-        bd_date = None
-        days = 7
+        today = datetime.today().date() # for correct representation as date
 
-        user_birth_date = None
         upcoming_birthdays = []
 
         for record in self.data.values():
-            if record.birthday is None:
+            user_birth_date = record.get_birthday()
+            if user_birth_date is None:
                 continue
-            user_birth_date = record.birthday.value.date()
 
             if (
                 user_birth_date.month == 2
@@ -169,7 +175,7 @@ class AddressBook(UserDict):
                 user_birth_date = user_birth_date.replace(day=28)
 
             # get possible dates of birthdays for the week to then check if it matches the bd date of the user
-            for i in range(days):
+            for i in range(n_days):
                 bd_date = today + timedelta(days=i)
                 if (
                     bd_date.month == user_birth_date.month
@@ -180,7 +186,7 @@ class AddressBook(UserDict):
                         {
                             "name": record.name.value,
                             "congratulation_date": congratulation_date.strftime(
-                                "%Y.%m.%d"
+                                "%d.%m.%Y" # changed representation similar to how we show birthday in record
                             ),
                         }
                     )
