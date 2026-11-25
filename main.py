@@ -1,4 +1,5 @@
 
+from field_handlers import add_address, add_email, edit_contact
 from storage import save_data, load_data
 from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact
 
@@ -51,6 +52,15 @@ def main():
 
             elif command == "birthdays":
                 print(show_upcoming_birthdays(args, book))
+
+            elif command == "add-address":
+                print(add_address(args, book))
+
+            elif command == "add-email":
+                print(add_email(args, book))
+
+            elif command == "edit":
+                print(edit_contact(args, book))
 
             elif command == "delete":
                 print(delete_contact(args,book))

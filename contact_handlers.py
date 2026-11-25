@@ -10,16 +10,15 @@ def add_contact(args, book):
         raise ValueError("Correct format: add [Contact name] [phone number]")
 
     name, phone, *_ = args
-    record = book.find(name)
 
-    if record is None:
-        record = Record(name)
-        record.add_phone(phone)
-        book.add_record(record)
-        return "Contact added"
-    
+    if name in book:
+        book.find(name).add_phone(phone)
+        return "Contact updated"
+
+    record = Record(name)
     record.add_phone(phone)
-    return "Contact updated"
+    book.add_record(record)
+    return "Contact added"
 
 
 @input_error
@@ -41,9 +40,6 @@ def change_contact(args, book):
     name, old_phone, new_phone, *_ = args
     record = book.find(name)
 
-    if record is None:
-        raise ValueError("No such contact")
-
     record.edit_phone(old_phone, new_phone)
     return "Contact updated"
 
@@ -56,9 +52,6 @@ def show_phone(args, book):
     name, *_ = args
     record = book.find(name)
 
-    if record is None:
-        raise ValueError("Contact not found")
-
     return f"{record.name} {', '.join(str(phone) for phone in record.phones)}"
 
 
@@ -66,10 +59,7 @@ def show_phone(args, book):
 def show_all_contacts(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
-    result = ""
-    for record in book.data.values():
-        result += f"{record.name} {', '.join(str(phone) for phone in record.phones)}\n"
-    return result
+    return book.show_all()
 
 
 @input_error
@@ -78,8 +68,6 @@ def add_birthday(args, book: AddressBook):
         raise ValueError("Correct format:  add-birthday [Contact name] DD.MM.YYYY in digits")
     name, birthday, *_ = args
     record = book.find(name)
-    if record is None:
-        return "No such contact"
 
     record.add_birthday(birthday)
     return "Birth date added"
@@ -91,8 +79,6 @@ def show_birthday(args, book):
         raise ValueError("Correct format: show-birthday [Contact name] ")
     name, *_ = args
     record = book.find(name)
-    if record is None:
-        return "No such contact"
 
     if record.birthday is None:
         return "No information"

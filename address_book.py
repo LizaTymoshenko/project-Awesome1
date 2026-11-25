@@ -2,6 +2,9 @@ from collections import UserDict
 from datetime import datetime, timedelta
 import calendar
 
+from console import render_contacts_table
+from validators import validate_email
+
 class Field:
     def __init__(self, value):
         self.value = value
@@ -43,10 +46,17 @@ class Phone(Field):
 
 
 class Record:
+    # class-level defaults only keep records pickled before these fields existed loadable;
+    # new records get real instance attributes in __init__
+    email = None
+    address = None
+
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
 
     # adds a phone after checking if the phone already exists
     def add_phone(self, phone: str):
@@ -75,6 +85,12 @@ class Record:
         self.phones[self.phones.index(old)] = new
 
 
+    def add_email(self, email: str):
+        self.email = validate_email(email)
+
+    def add_address(self, address: str):
+        self.address = address
+
     def find_phone(self, phone: str):
         return (
             self.phones[self.phones.index(Phone(phone))]
@@ -83,7 +99,11 @@ class Record:
         )
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        phones = ", ".join(str(phone) for phone in self.phones) or "-"
+        return (
+            f"{self.name} | phones: {phones} | email: {self.email or '-'}"
+            f" | address: {self.address or '-'} | birthday: {self.birthday or '-'}"
+        )
 
     # NEW
     def add_birthday(self, birthday):
@@ -99,13 +119,27 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
 
     def find(self, name):
-        return self.data.get(name)
+        record = self.data.get(name)
+        if record is None:
+            raise ValueError(f"Contact {name} not found")
+        return record
 
     def delete(self, name):
-        if self.data.get(name) is not None:
-            self.data.pop(name)
-        else:
-            raise ValueError(f"Contact {name} not found")
+        self.find(name)  # raises if the contact does not exist
+        self.data.pop(name)
+
+    def show_all(self):
+        return render_contacts_table(self.data.values())
+
+    def rename(self, old_name, new_name):
+        record = self.find(old_name)
+        if new_name == old_name:
+            return
+        if new_name in self.data:
+            raise ValueError(f"Contact {new_name} already exists")
+        del self.data[old_name]
+        record.name = Name(new_name)
+        self.data[new_name] = record
 
     def is_empty(self):
         return True if self.data == {} else False
