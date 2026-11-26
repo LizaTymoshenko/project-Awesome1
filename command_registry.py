@@ -55,17 +55,5 @@ class CommandRegistry(UserDict):
         return list(self.data.keys())
 
     def get_close_commands(self, sample_command: str) -> list:
-        return get_close_matches(sample_command, self.get_all_command_names())
+        return get_close_matches(sample_command, self.get_all_command_names(), n=1)
 
-    
-
-        
-
-            
-
-                
-
-
-
-def find_command_with_close_match():
-    pass

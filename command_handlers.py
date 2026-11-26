@@ -2,6 +2,7 @@ from command_registry import CommandRegistry
 from commands import registry
 
 
+# execute command from the CommandRegistry + find close matches if command if not correct
 def execute_command(command, args, book):
     exec = registry.find(command)
     if exec:
@@ -37,9 +38,15 @@ def show_close_matches(in_command: str, args: list|tuple, registry: CommandRegis
     return close_commands
 
 
-# possible match responses
+# possible responses
+def show_all_commands():
+    return f"Available commands:\n{registry.show_all()}"
+
+def help_response() -> str:
+    return "Please type 'help' to see all available commands."
+
 def successful_match_response(close_commands: list, registry: CommandRegistry) -> str:
     return 'Possibly you wanted to enter this command:\n' + registry.show_selected(close_commands)
 
 def unsuccessful_match_response() -> str:
-    return "Invalid command. Please type 'help' to see all available commands."
+    return f"Invalid command. {help_response()}"
