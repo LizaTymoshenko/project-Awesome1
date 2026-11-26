@@ -1,5 +1,5 @@
 from rich import box
-from rich.console import Console
+from rich.console import Console, Group
 from rich.markup import escape
 from rich.panel import Panel
 from rich.table import Table
@@ -75,7 +75,32 @@ def render_welcome() -> str:
     return _render(Panel(text, box=box.ROUNDED, border_style="blue", expand=False, padding=(1, 4)))
 
 
+HELP_GROUPS = {
+    "address book": ("Contacts", "cyan"),
+    "notebook": ("Notes", "magenta"),
+    "base": ("General", "yellow"),
+    "help": ("General", "yellow"),
+}
+
+
 def render_help_table(commands) -> str:
-    columns = [("Command", "bold green"), ("Description", "white")]
-    rows = [[command.format_spec, command.description] for command in commands]
-    return render_table("Available commands", columns, rows)
+    """One panel per group (contacts, notes, general); command name, its arguments and description in columns."""
+    grouped = {}
+    for command in commands:
+        grouped.setdefault(HELP_GROUPS[command.cmd_type], []).append(command)
+
+    panels = []
+    for group_key in dict.fromkeys(HELP_GROUPS.values()):  # fixed order: contacts, notes, general
+        group = grouped.get(group_key, [])
+        if not group:
+            continue
+        title, color = group_key
+        grid = Table.grid(padding=(0, 3))
+        grid.add_column(style=f"bold {color}", no_wrap=True)
+        grid.add_column(style="italic dim", no_wrap=True)
+        grid.add_column()
+        for command in group:
+            name, _, arguments = command.format_spec.partition(" ")
+            grid.add_row(escape(name), escape(arguments), escape(command.description))
+        panels.append(Panel(grid, title=f"[bold {color}]{title}", title_align="left", border_style=color, padding=(1, 2)))
+    return _render(Group(*panels))
