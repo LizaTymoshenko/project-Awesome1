@@ -17,7 +17,6 @@ try:
 except ImportError:
     pass
 
-
 def parse_input(user_input):
 
     command, *args = user_input.split()
