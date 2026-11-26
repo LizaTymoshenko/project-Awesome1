@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from collections import UserDict
 from typing import Callable, Literal
