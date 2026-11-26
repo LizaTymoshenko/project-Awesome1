@@ -8,17 +8,30 @@ def test_welcome_points_to_help_and_exit():
     assert "help" in text and "exit" in text
 
 
-def test_help_table_lists_every_command_with_format_and_description():
+def test_help_table_shows_name_arguments_and_description_of_every_command():
     commands = [
-        Command("add", "add [Contact name] [phone number]", "adds new contact", print, "base"),
-        Command("all", "all", "shows all contacts", print, "base"),
+        Command("add", "add [Contact name] [phone number]", "adds new contact", print, "address book"),
+        Command("all", "all", "shows all contacts", print, "address book"),
     ]
 
     text = render_help_table(commands)
 
-    assert "add [Contact name] [phone number]" in text
+    assert "add" in text
+    assert "[Contact name] [phone number]" in text
     assert "adds new contact" in text
     assert "shows all contacts" in text
+
+
+def test_help_table_groups_commands_by_kind():
+    commands = [
+        Command("add-note", "add-note [text]", "adds note", print, "notebook"),
+        Command("add", "add [Contact name]", "adds contact", print, "address book"),
+        Command("exit", "exit", "closes bot", print, "base"),
+    ]
+
+    text = render_help_table(commands)
+
+    assert text.index("Contacts") < text.index("Notes") < text.index("General")
 
 
 def test_help_command_shows_the_registered_commands():
