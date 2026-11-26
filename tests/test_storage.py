@@ -82,3 +82,16 @@ def test_file_without_the_book_is_treated_as_corrupted(data_file):
     book, _ = storage.load_data()
     assert book.is_empty()
     assert data_file.with_suffix(".corrupt").exists()
+
+
+def test_file_saved_without_notes_keeps_the_contacts(data_file):
+    import pickle
+
+    data_file.parent.mkdir(parents=True)
+    data_file.write_bytes(pickle.dumps({"book": book_with_bob()}))
+
+    book, notebook = storage.load_data()
+
+    assert book.find("Bob").email == "bob@mail.com"
+    assert notebook.data == {}
+    assert not data_file.with_suffix(".corrupt").exists()

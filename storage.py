@@ -22,7 +22,8 @@ def load_data():
     try:
         with open(DATA_FILE, "rb") as f:
             data = pickle.load(f)
-            return data["book"], data["notebook"]
+            # files saved before notes existed have no "notebook": keep the contacts, start with no notes
+            return data["book"], data.get("notebook", NoteBook())
     except FileNotFoundError:
         return AddressBook(), NoteBook()
     except Exception:
