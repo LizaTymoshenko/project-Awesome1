@@ -45,3 +45,19 @@ def render_contacts_table(records) -> str:
         for record in records
     ]
     return render_table("Contacts", columns, rows)
+
+def render_notes_table(notes, title: str = "Notes") -> str:
+    columns = [
+        ("ID", "bold cyan"),
+        ("Text", ""),
+        ("Tags", "bold bright_blue"),
+    ]
+    rows = [
+        [
+            str(note.note_id),
+            note.text,
+            ", ".join(sorted(note.tags)) or "-",
+        ]
+        for note in notes
+    ]
+    return render_table(title, columns, rows)

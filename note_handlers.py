@@ -1,6 +1,6 @@
 from notes import Note, NoteBook
 from command_registry import CommandFormatError
-
+from console import render_notes_table
 
 def _parse_note_id(value: str) -> int:
     try:
@@ -8,9 +8,6 @@ def _parse_note_id(value: str) -> int:
     except ValueError:
         raise ValueError("Note id has to be a number") from None
     return note_id
-
-def _format_notes(notes: list[Note]) -> str:
-    return "\n".join(str(note) for note in notes)
 
 
 def add_note(args: list[str], notebook: NoteBook) -> str:
@@ -22,17 +19,20 @@ def add_note(args: list[str], notebook: NoteBook) -> str:
 
 
 def show_notes(args: list[str], notebook: NoteBook) -> str:
-    result = _format_notes(notebook.get_all_notes())
-    return result if result else "No notes yet"
+    notes = notebook.get_all_notes()
+    if not notes:
+        return "No notes yet"
+    return render_notes_table(notes)
 
 
 def search_notes(args: list[str], notebook: NoteBook) -> str:
     if not args:
         raise CommandFormatError
-    
     text_to_search = " ".join(args)
-    result = _format_notes(notebook.search(text_to_search))
-    return result if result else "No notes found"
+    found = notebook.search(text_to_search)
+    if not found:
+        return "No notes found"
+    return render_notes_table(found, title=f"Search: {text_to_search}")
 
 
 def edit_note(args: list[str], notebook: NoteBook) -> str:
@@ -58,12 +58,11 @@ def sort_notes(args: list[str], notebook: NoteBook) -> str:
     groups = notebook.group_by_tags()
     if not groups:
         return "No notes yet"
-    blocks = []
-    for tag, notes in groups.items():
-        row = ("#" + tag if tag else "No tag") + "\n" + _format_notes(notes)
-        blocks.append(row)
-    
-    return "\n\n".join(blocks)
+    tables = [
+        render_notes_table(notes, title=f"#{tag}" if tag else "No tag")
+        for tag, notes in groups.items()
+    ]
+    return "\n\n".join(tables)
 
 
 def add_tag(args: list[str], notebook: NoteBook) -> str:
@@ -89,5 +88,7 @@ def search_tag(args: list[str], notebook: NoteBook) -> str:
     if not args:
         raise CommandFormatError
     tag, *_ = args
-    result = notebook.search_by_tag(tag)
-    return _format_notes(result) if result else "No notes found"
+    found = notebook.search_by_tag(tag)
+    if not found:
+        return "No notes found"
+    return render_notes_table(found, title=f"#{Note.normalize_tag(tag)}")
