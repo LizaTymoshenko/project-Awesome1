@@ -131,6 +131,17 @@ class AddressBook(UserDict):
     def show_all(self):
         return render_contacts_table(self.data.values())
 
+    def search(self, query: str):
+        query = query.lower()
+        found = []
+        for record in self.data.values():
+            values = [str(record.name), *(str(phone) for phone in record.phones)]
+            if record.email:
+                values.append(record.email)
+            if any(query in value.lower() for value in values):
+                found.append(record)
+        return found
+
     def rename(self, old_name, new_name):
         record = self.find(old_name)
         if new_name == old_name:
