@@ -4,6 +4,7 @@ from base_handlers import SessionEnd
 from console import render_welcome
 
 from commands import init_registry
+from prompt import create_command_input
 
 # for MacOS
 try:
@@ -22,11 +23,12 @@ def parse_input(user_input):
 def main():
     book, notebook = load_data()
     registry = init_registry()
+    read_command = create_command_input({command.name: command.format_spec for command in registry.values()})
     print(render_welcome())
     try:
 
         while True:
-            user_input = input("Enter a command: ")
+            user_input = read_command("Enter a command: ")
             if not user_input.strip():
                 continue
             command, *args = parse_input(user_input)
