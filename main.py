@@ -22,8 +22,6 @@ from note_handlers import add_note, show_notes, search_notes, edit_note, delete_
 
 from command_handlers import execute_command, show_all_commands
 
-# temp
-import readline
 
 def parse_input(user_input):
 
@@ -75,11 +73,6 @@ def main():
                 print(search_tag(args,notebook))
             elif command == "sort-notes":
                 print(sort_notes(args,notebook))
-            elif command == "help":
-                print(show_all_commands())
-
-            elif command == "search":
-                print(search_contacts(args, book))
             elif command == "help":
                 print(show_all_commands())
 
