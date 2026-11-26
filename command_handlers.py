@@ -1,6 +1,7 @@
 from command_registry import CommandRegistry
 from notes import NoteBook
 from address_book import AddressBook
+from console import render_help_table
 
 
 # execute command from the CommandRegistry + find close matches if command if not correct
@@ -37,7 +38,7 @@ def show_close_matches(in_command: str, args: list|tuple, registry: CommandRegis
 
 
 def show_all_commands(registry: CommandRegistry):
-    return f"Available commands:\n{registry.show_all()}"
+    return render_help_table(registry.values())
 
 
 # possible responses

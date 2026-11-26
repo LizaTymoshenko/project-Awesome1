@@ -1,5 +1,7 @@
 from rich import box
 from rich.console import Console
+from rich.markup import escape
+from rich.panel import Panel
 from rich.table import Table
 
 
@@ -18,11 +20,16 @@ def render_table(title: str, columns: list[tuple[str, str]], rows: list[list[str
     for header, style in columns:
         table.add_column(header, style=style)
     for row in rows:
-        table.add_row(*row)
+        # escape: text like "[phone number]" or an address "[home]" must not be read as rich markup
+        table.add_row(*(escape(cell) for cell in row))
 
+    return _render(table)
+
+
+def _render(renderable) -> str:
     console = Console()
     with console.capture() as capture:
-        console.print(table)
+        console.print(renderable)
     return capture.get().rstrip("\n")
 
 
@@ -61,3 +68,13 @@ def render_notes_table(notes, title: str = "Notes") -> str:
         for note in notes
     ]
     return render_table(title, columns, rows)
+
+def render_welcome() -> str:
+    text = "[bold]Personal Assistant[/bold]\nContacts, birthdays and notes in one place.\nType [bold green]help[/bold green] to see all commands, [bold red]exit[/bold red] to quit."
+    return _render(Panel(text, box=box.ROUNDED, border_style="blue", expand=False, padding=(1, 4)))
+
+
+def render_help_table(commands) -> str:
+    columns = [("Command", "bold green"), ("Description", "white")]
+    rows = [[command.format_spec, command.description] for command in commands]
+    return render_table("Available commands", columns, rows)
