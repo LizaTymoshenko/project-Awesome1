@@ -80,6 +80,8 @@ def main():
 
             elif command == "search":
                 print(search_contacts(args, book))
+            elif command == "help":
+                print(show_all_commands())
 
             else:
                 print(execute_command(command, args, book))
