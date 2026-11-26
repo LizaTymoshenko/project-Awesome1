@@ -8,13 +8,10 @@ def execute_command(command: str, args: list|tuple, book: AddressBook, notebook:
     cmd = registry.find(command)
     if cmd:
         rez = cmd.execute(args, book, notebook, registry)
-        if 'Correct format' in rez:
-            close_commands = show_close_matches(command, args, registry)
-            if command not in close_commands:
-                match_rez = successful_match_response(close_commands, registry)
-                return f"{rez}\n{match_rez}"
-            else:
-                return rez
+        close_commands = show_close_matches(command, args, registry)
+        if command not in close_commands:
+            match_rez = successful_match_response(close_commands, registry)
+            return f"{rez}\n{match_rez}"
         else:
             return rez
     else:
