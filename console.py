@@ -35,12 +35,13 @@ def _render(renderable) -> str:
 
 
 def render_contacts_table(records) -> str:
+    # two colors only: the name stands out, everything else is the default text color
     columns = [
         ("Name", "bold cyan"),
-        ("Phones", "green"),
-        ("Email", "magenta"),
-        ("Address", "yellow"),
-        ("Birthday", "bright_blue"),
+        ("Phones", ""),
+        ("Email", ""),
+        ("Address", ""),
+        ("Birthday", ""),
     ]
     rows = [
         [
