@@ -13,7 +13,7 @@ def render_table(title: str, columns: list[tuple[str, str]], rows: list[list[str
     table = Table(
         title=title,
         box=box.ROUNDED,
-        header_style="bold white on blue",
+        header_style="bold #ffffff on #1f6feb",
         border_style="bright_black",
         show_lines=True,  # a line between rows: multi-line cells must not run into the next row
         padding=(0, 2),
