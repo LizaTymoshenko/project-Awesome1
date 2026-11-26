@@ -38,10 +38,10 @@ def render_contacts_table(records) -> str:
     # two colors only: the name stands out, everything else is blue
     columns = [
         ("Name", "bold cyan"),
-        ("Phones", "bright_blue"),
-        ("Email", "bright_blue"),
-        ("Address", "bright_blue"),
-        ("Birthday", "bright_blue"),
+        ("Phones", "bold bright_blue"),
+        ("Email", "bold bright_blue"),
+        ("Address", "bold bright_blue"),
+        ("Birthday", "bold bright_blue"),
     ]
     rows = [
         [
