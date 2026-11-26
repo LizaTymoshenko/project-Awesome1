@@ -15,7 +15,8 @@ def render_table(title: str, columns: list[tuple[str, str]], rows: list[list[str
         box=box.ROUNDED,
         header_style="bold white on blue",
         border_style="bright_black",
-        row_styles=["", "dim"],
+        show_lines=True,  # a line between rows: multi-line cells must not run into the next row
+        padding=(0, 2),
     )
     for header, style in columns:
         table.add_column(header, style=style)
