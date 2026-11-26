@@ -95,10 +95,11 @@ def render_help_table(commands) -> str:
         if not group:
             continue
         title, color = group_key
-        grid = Table.grid(padding=(0, 3))
+        # padding bottom 1: one empty line under every command (Table.grid ignores it)
+        grid = Table(box=None, show_header=False, padding=(0, 3, 1, 0), pad_edge=False)
         grid.add_column(style=f"bold {color}", no_wrap=True)
-        grid.add_column(style="italic dim", no_wrap=True)
-        grid.add_column()
+        grid.add_column(style="italic dim", max_width=24, overflow="fold")  # long formats wrap here, not in the description
+        grid.add_column(overflow="fold")
         for command in group:
             name, _, arguments = command.format_spec.partition(" ")
             grid.add_row(escape(name), escape(arguments), escape(command.description))
