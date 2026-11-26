@@ -11,7 +11,7 @@ def render_table(title: str, columns: list[tuple[str, str]], rows: list[list[str
     columns: (header, rich style) pairs; rows: one list of cell strings per row.
     """
     table = Table(
-        title=title,
+        title=escape(title),  # a search query like "[/x]" in the title must not be read as markup
         box=box.ROUNDED,
         header_style="bold #ffffff on #1f6feb",
         border_style="bright_black",

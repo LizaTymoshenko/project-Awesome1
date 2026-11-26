@@ -63,3 +63,11 @@ def test_square_brackets_in_text_are_shown_not_treated_as_markup():
     text = render_table("T", [("Col", "")], [["add [phone number]"]])
 
     assert "add [phone number]" in text
+
+
+def test_square_brackets_in_the_title_do_not_break_rendering():
+    from console import render_table
+
+    text = render_table("Search: [/x]", [("Col", "")], [["row"]])
+
+    assert "[/x]" in text  # the title may wrap in a narrow table, so check the bracket part only
