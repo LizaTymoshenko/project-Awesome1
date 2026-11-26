@@ -1,5 +1,8 @@
 from command_registry import Command, CommandRegistry
-from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact
+from contact_handlers import (
+    add_contact, change_contact, show_phone, show_all_contacts, add_birthday, 
+    show_birthday, show_upcoming_birthdays, delete_contact, search_contacts
+)
 from field_handlers import add_address, add_email, edit_contact
 
 registry = CommandRegistry()
@@ -61,6 +64,11 @@ edit_command = Command('edit',
                             "edits contact from the Address Book", 
                             edit_contact)
 
+search_command = Command('search', 
+                            'search [name|phone|e-mail]', 
+                            "searches contacts in the Address Book by name, phone or email", 
+                            search_contacts)
+
 
 registry.register(add_command)
 registry.register(change_contact_command)
@@ -73,4 +81,5 @@ registry.register(show_upcoming_birthdays_command)
 registry.register(add_email_command)
 registry.register(add_address_command)
 registry.register(edit_command)
+registry.register(search_command)
 

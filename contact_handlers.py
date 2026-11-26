@@ -4,7 +4,6 @@ from console import render_contacts_table
 from command_registry import CommandFormatError
 from decorators import input_error
 from console import render_contacts_table
-from command_registry import CommandFormatError
 
 
 # functions layer between the user and the classes
@@ -103,10 +102,9 @@ def show_upcoming_birthdays(args, book: AddressBook):
         result += f"{user['name']}: {user['congratulation_date']}\n"
     return result
 
-@input_error
 def search_contacts(args, book: AddressBook):
     if len(args) < 1:
-        raise ValueError("Correct format: search [name, phone, e-mail]")
+        raise CommandFormatError
     query = " ".join(args)
     found = book.search(query)
     if not found:
