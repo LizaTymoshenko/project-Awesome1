@@ -46,10 +46,6 @@ def remove_phone(args, book):
 
     name, phone, *_ = args
     record = book.find(name)
-
-    if record is None:
-        raise ValueError("No such contact")
-
     record.remove_phone(phone)
     return "Phone removed"
 
