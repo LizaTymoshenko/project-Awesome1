@@ -4,7 +4,9 @@ class Note:
     def __init__(self, note_id: int, text: str, tags: list[str] | None = None):
         self.note_id = note_id
         self.text = text
-        self.tags = self.add_tags(tags)
+        self.tags = set()
+        if tags:
+            self.add_tags(tags)
 
 
     @property
@@ -19,8 +21,8 @@ class Note:
         self._text = validated_text
 
     def __str__(self):
-        tags = ', '.join(self.tags)
-        return f"{self.note_id} : {self.text} tags: {tags if tags else 'No tags'}"
+        tags = ', '.join(sorted(self.tags))
+        return f"{self.note_id} : {self.text} | tags: {tags if tags else 'No tags'}"
 
     def __repr__(self):
         return f"id:{self.note_id}, text={self.text!r}, tags={self.tags}"
@@ -32,13 +34,13 @@ class Note:
     def add_tags(self, tags: list[str]) -> None:
         for tag in tags:
             normalized_tag = Note.normalize_tag(tag)
-            if normalized_tag and normalized_tag not in self.tags:
-                self.tags.append(normalized_tag)
+            if normalized_tag:
+                self.tags.add(normalized_tag)
 
     def remove_tag(self, tag: str) -> None:
         tag = Note.normalize_tag(tag)
         if tag not in self.tags:
-            raise ValueError(f"Note {self.note_id} has no tag: {tag}")    
+            raise ValueError(f"Note {self.note_id} has no tag #{tag}")    
         self.tags.remove(tag)
 
 
@@ -95,14 +97,22 @@ class NoteBook(UserDict):
 
     # returns a dict: key - tag name, value - list of notes that have this tag
     # key: None - stores notes without tags
-    def sort_by_tag(self) -> dict[str | None, list[Note]]:
-        result = defaultdict(list)
+    def group_by_tags(self) -> dict[str | None, list[Note]]:
+        groups = defaultdict(list)
         for note in self.data.values():
             if not note.tags:
-                result[None].append(note)
+                groups[None].append(note)
                 continue
             for tag in note.tags:
-                result[tag].append(note)
+                groups[tag].append(note)
+
+        result = {
+            tag: groups[tag]
+            for tag in sorted(tag for tag in groups if tag is not None)
+        }
+        if None in groups:
+            result[None] = groups[None]
+        return result
                    
         
 
