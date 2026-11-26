@@ -100,8 +100,13 @@ def render_help_table(commands) -> str:
         grid.add_column(style=f"bold {color}", no_wrap=True)
         grid.add_column(style="italic dim", max_width=24, overflow="fold")  # long formats wrap here, not in the description
         grid.add_column(overflow="fold")
+        # aliases (exit / close) share one row
+        aliases = {}
         for command in group:
-            name, _, arguments = command.format_spec.partition(" ")
-            grid.add_row(escape(name), escape(arguments), escape(command.description))
+            aliases.setdefault(command.description, []).append(command)
+        for description, same in aliases.items():
+            names = " / ".join(command.name for command in same)
+            _, _, arguments = same[0].format_spec.partition(" ")
+            grid.add_row(escape(names), escape(arguments), escape(description))
         panels.append(Panel(grid, title=f"[bold {color}]{title}", title_align="left", border_style=color, padding=(1, 2)))
     return _render(Group(*panels))
