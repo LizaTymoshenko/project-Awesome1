@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 from collections import UserDict
-from typing import Callable
+from typing import Callable, Literal
 from difflib import get_close_matches
 
 from decorators import input_error
+from address_book import AddressBook
+from notes import NoteBook
 
 
 # custom exception
@@ -18,12 +20,16 @@ class Command:
     format_spec: str
     description: str
     handler: Callable[...]
+    type: Literal['address book', 'notebook']
 
     @input_error
-    def execute(self, *args, **kwargs):
+    def execute(self, args, book: AddressBook, notebook: NoteBook):
         """Executes the underlying function with the provided arguments."""
         try:
-            return self.handler(*args, **kwargs)
+            if self.type == 'address book':
+                return self.handler(args, book)
+            else:
+                return self.handler(args, notebook)
         except CommandFormatError:
             raise ValueError(f"Correct format: {self.format_spec}")
 
@@ -37,10 +43,6 @@ class CommandRegistry(UserDict):
 
     def find(self, command_name):
         return self.data.get(command_name)
-    
-    def delete(self, name):
-        self.find(name)  # raises if the contact does not exist
-        self.data.pop(name)
 
     def show_all(self):
         if not self.data:

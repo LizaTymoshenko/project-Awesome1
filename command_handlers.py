@@ -3,10 +3,10 @@ from commands import registry
 
 
 # execute command from the CommandRegistry + find close matches if command if not correct
-def execute_command(command, args, book):
+def execute_command(command, args, book, notebook):
     exec = registry.find(command)
     if exec:
-        rez = exec.execute(args, book)
+        rez = exec.execute(args, book, notebook)
         if 'Correct format' in rez:
             close_commands = show_close_matches(command, args, registry)
             if command not in close_commands:
