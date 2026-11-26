@@ -10,7 +10,6 @@ except ImportError:
     pass
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
-from notes import NoteBook
 
 
 def parse_input(user_input):
@@ -23,8 +22,7 @@ def parse_input(user_input):
 
 
 def main():
-    book = load_data()
-    notebook = NoteBook()
+    book, notebook = load_data()
     print("Welcome to the assistant bot!")
     try:
 
@@ -35,7 +33,6 @@ def main():
             command, *args = parse_input(user_input)
 
             if command in ["close", "exit"]:
-                save_data(book)
                 print("Good bye!")
                 break
 
@@ -99,8 +96,10 @@ def main():
                 print(sort_notes(args,notebook))
             else:
                 print("Invalid command.")
+    except (KeyboardInterrupt, EOFError):
+        print("\nGood bye!")
     finally:
-        save_data(book)
+        save_data(book, notebook)
 
 
 if __name__ == "__main__":
