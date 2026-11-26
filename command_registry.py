@@ -8,6 +8,7 @@ from address_book import AddressBook
 from notes import NoteBook
 
 
+
 # custom exception
 class CommandFormatError(ValueError):
     """Base exception for incorect command format errors."""

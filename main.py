@@ -71,7 +71,6 @@ def main():
 
     except (KeyboardInterrupt, EOFError):
         print("\nGood bye!")
-
     finally:
         save_data(book, notebook)
 
