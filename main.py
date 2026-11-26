@@ -44,7 +44,8 @@ def main():
                 print(search_contacts(args, book))
 
             else:
-                print("Invalid command.")
+                print(execute_command(command, args, book))
+
     except (KeyboardInterrupt, EOFError):
         print("\nGood bye!")
     finally:
