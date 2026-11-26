@@ -10,7 +10,10 @@ except ImportError:
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
 
-from commands import registry
+from command_handlers import execute_command
+
+# temp
+import readline
 
 def parse_input(user_input):
 

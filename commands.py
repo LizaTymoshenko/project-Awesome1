@@ -6,27 +6,27 @@ registry = CommandRegistry()
 
 add_command = Command('add', 
                       'add [Contact name] [phone number]', 
-                      'add new contact to Address Book or add new phone to existing contact', 
+                      'adds new contact to Address Book or add new phone to existing contact', 
                       add_contact)
 
 change_contact_command = Command('change', 
                                  'change [Contact name] [Old phone] [New phone]', 
-                                 "change contact's phone in Address Book", 
+                                 "changes contact's phone in Address Book", 
                                  change_contact)
 
 delete_contact_command = Command('delete', 
                                  'delete [Contact name]', 
-                                 "delete contact from the Address Book", 
+                                 "deletes contact from the Address Book", 
                                  delete_contact)
 
 show_phone_command = Command('phone', 
                             'phone [Contact name]', 
-                            "show phone of the contact from the Address Book", 
+                            "shows phone of the contact from the Address Book", 
                             show_phone)
 
 show_all_command = Command('all', 
                             'all', 
-                            "show all contacts from the Address Book", 
+                            "shows all contacts from the Address Book", 
                             show_all_contacts)
 
 

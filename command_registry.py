@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from collections import UserDict
 from typing import Callable
+from difflib import get_close_matches
+
 from decorators import input_error
+
 
 # custom exception
 class CommandFormatError(ValueError):
@@ -33,10 +36,7 @@ class CommandRegistry(UserDict):
         self.data[command.name] = command
 
     def find(self, command_name):
-        command = self.data.get(command_name)
-        if command is None:
-            raise ValueError(f"Command '{command_name}' not found.")
-        return command
+        return self.data.get(command_name)
     
     def delete(self, name):
         self.find(name)  # raises if the contact does not exist
@@ -48,3 +48,24 @@ class CommandRegistry(UserDict):
         else:
             return "\n".join([str(command) for command in self.data.values()])
 
+    def show_selected(self, selected: list) -> str:
+        return '\n'.join([str(self.find(command)) for command in selected])
+        
+    def get_all_command_names(self):
+        return list(self.data.keys())
+
+    def get_close_commands(self, sample_command: str) -> list:
+        return get_close_matches(sample_command, self.get_all_command_names())
+
+    
+
+        
+
+            
+
+                
+
+
+
+def find_command_with_close_match():
+    pass
