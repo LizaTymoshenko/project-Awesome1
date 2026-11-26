@@ -51,12 +51,6 @@ class CommandRegistry(UserDict):
     def find(self, command_name):
         return self.data.get(command_name)
 
-    def show_all(self):
-        if not self.data:
-            return "Command registry is empty."
-        else:
-            return "\n".join([str(command) for command in self.data.values()])
-
     def show_selected(self, selected: list) -> str:
         return '\n'.join([str(self.find(command)) for command in selected])
         

@@ -1,6 +1,7 @@
 from storage import save_data, load_data
 from command_handlers import execute_command
 from base_handlers import SessionEnd
+from console import render_welcome
 
 from commands import init_registry
 
@@ -21,7 +22,7 @@ def parse_input(user_input):
 def main():
     book, notebook = load_data()
     registry = init_registry()
-    print("Welcome to the assistant bot!")
+    print(render_welcome())
     try:
 
         while True:
