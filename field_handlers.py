@@ -1,11 +1,10 @@
 from address_book import AddressBook, Record
-from decorators import input_error
+from command_registry import CommandFormatError
 
 
-@input_error
 def add_address(args, book: AddressBook):
     if len(args) < 2:
-        raise ValueError("Correct format: add-address [Contact name] [address]")
+        raise CommandFormatError
 
     name, *address_parts = args
     record = book.find(name)
@@ -15,10 +14,9 @@ def add_address(args, book: AddressBook):
     return f"Address {action}"
 
 
-@input_error
 def add_email(args, book: AddressBook):
     if len(args) != 2:
-        raise ValueError("Correct format: add-email [Contact name] [email]")
+        raise CommandFormatError
 
     name, email = args
     record = book.find(name)
@@ -37,10 +35,9 @@ RECORD_SETTERS = {
 EDITABLE_FIELDS = ["name", *RECORD_SETTERS]
 
 
-@input_error
 def edit_contact(args, book: AddressBook):
     if len(args) < 3:
-        raise ValueError("Correct format: edit [Contact name] [name|address|email|birthday] [new value]")
+        raise CommandFormatError
 
     name, field, *value_parts = args
     field = field.lower()

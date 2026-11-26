@@ -1,15 +1,14 @@
-
-from field_handlers import add_address, add_email, edit_contact
 from storage import save_data, load_data
-from contact_handlers import add_contact, change_contact, show_phone, show_all_contacts, add_birthday, show_birthday, show_upcoming_birthdays, delete_contact, search_contacts
+from command_handlers import execute_command
+from base_handlers import SessionEnd
+
+from commands import init_registry
 
 # for MacOS
 try:
     import readline # parses arrow-up / arrow-down on input in console
 except ImportError:
     pass
-from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
-from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
 
 
 def parse_input(user_input):
@@ -19,10 +18,9 @@ def parse_input(user_input):
     return command, *args
 
 
-
-
 def main():
     book, notebook = load_data()
+    registry = init_registry()
     print("Welcome to the assistant bot!")
     try:
 
@@ -32,71 +30,9 @@ def main():
                 continue
             command, *args = parse_input(user_input)
 
-            if command in ["close", "exit"]:
-                print("Good bye!")
-                break
+            print(execute_command(command, args, book, notebook, registry))
 
-            elif command == "hello":
-                print("How can I help you?")
-
-            elif command == "add":
-                print(add_contact(args, book))
-
-            elif command == "change":
-                print(change_contact(args, book))
-
-            elif command == "phone":
-                print(show_phone(args, book))
-
-            elif command == "all":
-                print(show_all_contacts(args, book))
-
-            elif command == "add-birthday":
-                print(add_birthday(args, book))
-
-            elif command == "show-birthday":
-                print(show_birthday(args, book))
-
-            elif command == "birthdays":
-                print(show_upcoming_birthdays(args, book))
-
-            elif command == "add-address":
-                print(add_address(args, book))
-
-            elif command == "add-email":
-                print(add_email(args, book))
-
-            elif command == "edit":
-                print(edit_contact(args, book))
-
-            elif command == "delete":
-                print(delete_contact(args,book))
-
-            elif command == "search":
-                print(search_contacts(args, book))
-
-            # notes
-            elif command == "add-note":
-                print(add_note(args,notebook))
-            elif command == "notes":
-                print(show_notes(args, notebook))
-            elif command == "search-note":
-                print(search_notes(args, notebook))
-            elif command == "edit-note":
-                print(edit_note(args,notebook))
-            elif command == "delete-note":
-                print(delete_note(args,notebook))
-            elif command == "add-tag":
-                print(add_tag(args,notebook))
-            elif command == "remove-tag":
-                print(remove_tag(args,notebook))
-            elif command == "search-tag":
-                print(search_tag(args,notebook))
-            elif command == "sort-notes":
-                print(sort_notes(args,notebook))
-            else:
-                print("Invalid command.")
-    except (KeyboardInterrupt, EOFError):
+    except (KeyboardInterrupt, EOFError, SessionEnd):
         print("\nGood bye!")
     finally:
         save_data(book, notebook)

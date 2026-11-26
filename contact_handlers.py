@@ -1,14 +1,13 @@
 from address_book import Record, AddressBook
-from decorators import input_error
+from command_registry import CommandFormatError
 from console import render_contacts_table
 
 
 # functions layer between the user and the classes
-@input_error
 def add_contact(args, book):
     if len(args) < 2:
-        raise ValueError("Correct format: add [Contact name] [phone number]")
-
+        raise CommandFormatError
+    
     name, phone, *_ = args
 
     if name in book:
@@ -21,21 +20,18 @@ def add_contact(args, book):
     return "Contact added"
 
 
-@input_error
 def delete_contact(args, book):
     if len(args) < 1:
-        raise ValueError("Correct format: delete [Contact name]")
+        raise CommandFormatError
     
     name, *_ = args
     book.delete(name)
     return "Contact deleted"
 
 
-
-@input_error
 def change_contact(args, book):
     if len(args) < 3:
-        raise ValueError("Correct format: change [Contact name] [Old phone] [Newphone]")
+        raise CommandFormatError
 
     name, old_phone, new_phone, *_ = args
     record = book.find(name)
@@ -44,10 +40,9 @@ def change_contact(args, book):
     return "Contact updated"
 
 
-@input_error
 def show_phone(args, book):
     if len(args) != 1:
-        raise ValueError("Correct format: phone [Contact name]")
+        raise CommandFormatError
 
     name, *_ = args
     record = book.find(name)
@@ -55,17 +50,15 @@ def show_phone(args, book):
     return f"{record.name} {', '.join(str(phone) for phone in record.phones)}"
 
 
-@input_error
 def show_all_contacts(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
     return book.show_all()
 
 
-@input_error
 def add_birthday(args, book: AddressBook):
     if len(args) < 2:
-        raise ValueError("Correct format:  add-birthday [Contact name] DD.MM.YYYY in digits")
+        raise CommandFormatError
     name, birthday, *_ = args
     record = book.find(name)
 
@@ -73,10 +66,9 @@ def add_birthday(args, book: AddressBook):
     return "Birth date added"
 
 
-@input_error
 def show_birthday(args, book):
     if len(args) != 1:
-        raise ValueError("Correct format: show-birthday [Contact name] ")
+        raise CommandFormatError
     name, *_ = args
     record = book.find(name)
 
@@ -85,7 +77,6 @@ def show_birthday(args, book):
     return f"{name} celebrates birthday on {record.birthday}"
 
 
-@input_error
 def show_upcoming_birthdays(args, book: AddressBook):
     if book.is_empty():
         return "Contact book is empty"
@@ -108,10 +99,9 @@ def show_upcoming_birthdays(args, book: AddressBook):
         result += f"{user['name']}: {user['congratulation_date']}\n"
     return result
 
-@input_error
 def search_contacts(args, book: AddressBook):
     if len(args) < 1:
-        raise ValueError("Correct format: search [name, phone, e-mail]")
+        raise CommandFormatError
     query = " ".join(args)
     found = book.search(query)
     if not found:
