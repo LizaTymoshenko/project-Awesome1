@@ -34,6 +34,18 @@ def test_help_table_groups_commands_by_kind():
     assert text.index("Contacts") < text.index("Notes") < text.index("General")
 
 
+def test_commands_with_the_same_description_share_one_row():
+    commands = [
+        Command("close", "close", "closes bot", print, "base"),
+        Command("exit", "exit", "closes bot", print, "base"),
+    ]
+
+    text = render_help_table(commands)
+
+    assert "close / exit" in text
+    assert text.count("closes bot") == 1
+
+
 def test_help_command_shows_the_registered_commands():
     from command_handlers import show_all_commands
     from commands import init_registry
