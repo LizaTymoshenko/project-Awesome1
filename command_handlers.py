@@ -1,12 +1,13 @@
 from command_registry import CommandRegistry
-from commands import registry
+from notes import NoteBook
+from address_book import AddressBook
 
 
 # execute command from the CommandRegistry + find close matches if command if not correct
-def execute_command(command, args, book, notebook):
+def execute_command(command: str, args: list|tuple, book: AddressBook, notebook: NoteBook, registry: CommandRegistry):
     cmd = registry.find(command)
     if cmd:
-        rez = cmd.execute(args, book, notebook)
+        rez = cmd.execute(args, book, notebook, registry)
         if 'Correct format' in rez:
             close_commands = show_close_matches(command, args, registry)
             if command not in close_commands:
@@ -38,10 +39,11 @@ def show_close_matches(in_command: str, args: list|tuple, registry: CommandRegis
     return close_commands
 
 
-# possible responses
-def show_all_commands():
+def show_all_commands(registry: CommandRegistry):
     return f"Available commands:\n{registry.show_all()}"
 
+
+# possible responses
 def help_response() -> str:
     return "Please type 'help' to see all available commands."
 

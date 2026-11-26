@@ -1,5 +1,8 @@
 from storage import save_data, load_data
-from command_handlers import execute_command, show_all_commands
+from command_handlers import execute_command
+from base_handlers import SessionEnd
+
+from commands import init_registry
 
 # for MacOS
 try:
@@ -17,6 +20,7 @@ def parse_input(user_input):
 
 def main():
     book, notebook = load_data()
+    registry = init_registry()
     print("Welcome to the assistant bot!")
     try:
 
@@ -26,20 +30,9 @@ def main():
                 continue
             command, *args = parse_input(user_input)
 
-            if command in ["close", "exit"]:
-                print("Good bye!")
-                break
+            print(execute_command(command, args, book, notebook, registry))
 
-            elif command == "hello":
-                print("How can I help you?")
-
-            elif command == "help":
-                print(show_all_commands())
-
-            else:
-                print(execute_command(command, args, book, notebook))
-
-    except (KeyboardInterrupt, EOFError):
+    except (KeyboardInterrupt, EOFError, SessionEnd):
         print("\nGood bye!")
     finally:
         save_data(book, notebook)

@@ -21,16 +21,20 @@ class Command:
     format_spec: str
     description: str
     handler: Callable[...]
-    type: Literal['address book', 'notebook']
+    cmd_type: Literal['address book', 'notebook', 'base', 'help']
 
     @input_error
-    def execute(self, args, book: AddressBook, notebook: NoteBook):
+    def execute(self, args, book: AddressBook, notebook: NoteBook, registry: CommandRegistry):
         """Executes the underlying function with the provided arguments."""
         try:
-            if self.type == 'address book':
+            if self.cmd_type == 'address book':
                 return self.handler(args, book)
-            else:
+            elif self.cmd_type == 'notebook':
                 return self.handler(args, notebook)
+            elif self.cmd_type == 'help':
+                return self.handler(registry)
+            elif self.cmd_type == 'base':
+                return self.handler()
         except CommandFormatError:
             raise ValueError(f"Correct format: {self.format_spec}")
 
@@ -59,4 +63,7 @@ class CommandRegistry(UserDict):
 
     def get_close_commands(self, sample_command: str) -> list:
         return get_close_matches(sample_command, self.get_all_command_names(), n=1)
+
+    def get_command_names_by_type(self, cmd_type):
+        return [cmd_name for cmd_name, cmd in self.data.items() if cmd.cmd_type == cmd_type]
 
