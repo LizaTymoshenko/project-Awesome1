@@ -20,7 +20,7 @@ class Command:
     name: str
     format_spec: str
     description: str
-    handler: Callable[...]
+    handler: Callable[..., str]
     cmd_type: Literal['address book', 'notebook', 'base', 'help']
 
     @input_error
