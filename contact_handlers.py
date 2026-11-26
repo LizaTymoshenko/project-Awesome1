@@ -2,7 +2,6 @@ from address_book import Record, AddressBook
 from decorators import input_error
 from console import render_contacts_table
 from command_registry import CommandFormatError
-from decorators import input_error
 from console import render_contacts_table
 
 
