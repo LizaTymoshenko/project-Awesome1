@@ -55,3 +55,42 @@ def delete_note(args: list[str], notebook: NoteBook) -> str:
     note_id = _parse_note_id(raw_id)
     notebook.delete_note(note_id)
     return f"Note {note_id} deleted"
+
+@input_error
+def sort_notes(args: list[str], notebook: NoteBook) -> str:
+    groups = notebook.group_by_tags()
+    if not groups:
+        return "No notes yet"
+    blocks = []
+    for tag, notes in groups.items():
+        row = ("#" + tag if tag else "No tag") + "\n" + _format_notes(notes)
+        blocks.append(row)
+    
+    return "\n\n".join(blocks)
+
+@input_error
+def add_tag(args: list[str], notebook: NoteBook) -> str:
+    if len(args) < 2:
+        raise ValueError("Correct format: add-tag [note id] [tag1] [tag2] ...")
+    raw_id, *tags = args
+    note_id = _parse_note_id(raw_id)
+    notebook.add_tags(note_id, tags)
+    tags_text = " ".join(f"#{Note.normalize_tag(tag)}" for tag in tags)
+    return f"{tags_text} added to note {note_id}"
+
+@input_error
+def remove_tag(args: list[str], notebook: NoteBook) -> str:
+    if len(args) < 2:
+        raise ValueError("Correct format: remove-tag [note id] [tag]")
+    raw_id, tag, *_ = args
+    note_id = _parse_note_id(raw_id)
+    notebook.remove_tag(note_id, tag)
+    return f"Tag #{Note.normalize_tag(tag)} removed from note {note_id}"
+
+@input_error
+def search_tag(args: list[str], notebook: NoteBook) -> str:
+    if not args:
+        raise ValueError("Correct format: search-tag [tag]")
+    tag, *_ = args
+    result = notebook.search_by_tag(tag)
+    return _format_notes(result) if result else "No notes found"
