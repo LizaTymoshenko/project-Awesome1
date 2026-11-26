@@ -47,25 +47,6 @@ def main():
             elif command == "help":
                 print(show_all_commands())
 
-            # notes
-            elif command == "add-note":
-                print(add_note(args,notebook))
-            elif command == "notes":
-                print(show_notes(args, notebook))
-            elif command == "search-note":
-                print(search_notes(args, notebook))
-            elif command == "edit-note":
-                print(edit_note(args,notebook))
-            elif command == "delete-note":
-                print(delete_note(args,notebook))
-            elif command == "add-tag":
-                print(add_tag(args,notebook))
-            elif command == "remove-tag":
-                print(remove_tag(args,notebook))
-            elif command == "search-tag":
-                print(search_tag(args,notebook))
-            elif command == "sort-notes":
-                print(sort_notes(args,notebook))
             else:
                 print(execute_command(command, args, book, notebook))
 
