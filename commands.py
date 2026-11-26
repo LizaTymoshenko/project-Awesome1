@@ -112,7 +112,7 @@ def init_registry():
 
     show_upcoming_birthdays_command = Command(
         name='birthdays',
-        format_spec='birthdays | birthdays [N]',
+        format_spec='birthdays [N]',
         description="shows upcoming birthdays for N days ahead for the contacts from the Address Book (default N is 7)",
         handler=show_upcoming_birthdays,
         cmd_type='address book',
