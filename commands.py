@@ -163,7 +163,7 @@ def init_registry():
 
     show_note_command = Command(
         name='notes',
-        format_spec='notes [text]',
+        format_spec='notes',
         description="shows all notes from the personal assistant",
         handler=show_notes,
         cmd_type='notebook',
