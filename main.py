@@ -16,8 +16,6 @@ try:
     import readline # parses arrow-up / arrow-down on input in console
 except ImportError:
     pass
-from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
-from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
 
 def parse_input(user_input):
 

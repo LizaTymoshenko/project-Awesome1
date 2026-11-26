@@ -53,6 +53,7 @@ def delete_note(args: list[str], notebook: NoteBook) -> str:
     notebook.delete_note(note_id)
     return f"Note {note_id} deleted"
 
+
 def sort_notes(args: list[str], notebook: NoteBook) -> str:
     groups = notebook.group_by_tags()
     if not groups:
