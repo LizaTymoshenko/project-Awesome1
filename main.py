@@ -25,7 +25,6 @@ def main():
             command, *args = parse_input(user_input)
 
             if command in ["close", "exit"]:
-                save_data(book)
                 print("Good bye!")
                 break
 
@@ -70,6 +69,8 @@ def main():
 
             else:
                 print("Invalid command.")
+    except (KeyboardInterrupt, EOFError):
+        print("\nGood bye!")
     finally:
         save_data(book)
 
