@@ -149,13 +149,7 @@ class AddressBook(UserDict):
 
     # NEW
     # returns list of dict of users that should be congratulated with bd within upcoming week
-    def get_upcoming_birthdays(self, n_days: int = 7):
-        # check if n_days if positive integer
-        try:
-            n_days = int(n_days)
-            assert n_days > 0
-        except:
-            raise ValueError("Number of days should be positive integer.")
+    def get_upcoming_birthdays(self, n_days: int):
 
         today = datetime.today().date() # for correct representation as date
 
