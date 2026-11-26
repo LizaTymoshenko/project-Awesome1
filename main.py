@@ -20,7 +20,10 @@ except ImportError:
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
 
-from commands import registry
+from command_handlers import execute_command, show_all_commands
+
+# temp
+import readline
 
 def parse_input(user_input):
 
@@ -72,6 +75,9 @@ def main():
                 print(search_tag(args,notebook))
             elif command == "sort-notes":
                 print(sort_notes(args,notebook))
+            elif command == "help":
+                print(show_all_commands())
+
             else:
                 print(execute_command(command, args, book))
 
