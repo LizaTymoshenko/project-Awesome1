@@ -18,7 +18,6 @@ except ImportError:
     pass
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note
 from note_handlers import add_note, show_notes, search_notes, edit_note, delete_note, add_tag, remove_tag, search_tag, sort_notes
-from notes import NoteBook
 
 def parse_input(user_input):
 
@@ -28,8 +27,7 @@ def parse_input(user_input):
 
 
 def main():
-    book = load_data()
-    notebook = NoteBook()
+    book, notebook = load_data()
     print("Welcome to the assistant bot!")
     try:
 
