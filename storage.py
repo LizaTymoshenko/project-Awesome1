@@ -1,5 +1,6 @@
 import os
 import pickle
+from datetime import datetime
 from pathlib import Path
 
 from address_book import AddressBook
@@ -29,7 +30,8 @@ def load_data():
     except Exception:
         # unpickling garbage can raise almost anything (UnpicklingError, ValueError, EOFError, ...),
         # so catch broadly here only; keep the unreadable file aside so the next save does not destroy it
-        corrupt_file = DATA_FILE.with_suffix(".corrupt")
+        # timestamp in the name: a second broken file must not overwrite the first copy
+        corrupt_file = DATA_FILE.with_suffix(f".{datetime.now():%Y%m%d-%H%M%S}.corrupt")
         os.replace(DATA_FILE, corrupt_file)
         print(f"Could not read saved data, starting with an empty book. The old file is kept as {corrupt_file}")
         return AddressBook(), NoteBook()
