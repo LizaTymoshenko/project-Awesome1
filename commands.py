@@ -2,7 +2,8 @@ from command_registry import Command, CommandRegistry
 
 from contact_handlers import (
     add_contact, change_contact, show_phone, show_all_contacts, add_birthday, 
-    show_birthday, show_upcoming_birthdays, delete_contact, search_contacts
+    show_birthday, show_upcoming_birthdays, delete_contact, search_contacts,
+    remove_phone
 )
 from note_handlers import (
     add_note, show_notes, search_notes, edit_note, delete_note, 
@@ -142,6 +143,14 @@ def init_registry():
         cmd_type='address book',
     )
 
+    remove_phone_command = Command(
+            name='remove-phone',
+            format_spec='remove-phone [Contact name] [phone number]',
+            description="removes specified phone number of the contact from the Address Book",
+            handler=remove_phone,
+            cmd_type='address book',
+        )
+
     search_command = Command(
         name='search',
         format_spec='search [name|phone|e-mail]',
@@ -235,7 +244,7 @@ def init_registry():
         show_all_command, add_birthday_command,
         show_birthday_command, show_upcoming_birthdays_command,
         add_email_command, add_address_command, 
-        edit_command, search_command,
+        edit_command, remove_phone_command, search_command,
         # Notes
         add_note_command, show_note_command,
         search_notes_command, edit_note_command,
