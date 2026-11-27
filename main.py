@@ -23,7 +23,7 @@ def parse_input(user_input):
 def main():
     book, notebook = load_data()
     registry = init_registry()
-    read_command = create_command_input({command.name: command.format_spec for command in registry.values()})
+    read_command = create_command_input(registry.get_all_specs())
     print(render_welcome())
     try:
 
