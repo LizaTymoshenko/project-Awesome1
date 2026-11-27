@@ -45,21 +45,24 @@ class Command:
 
 
 class CommandRegistry(UserDict):
-    def register(self, command: Command):
+    def register(self, command: Command) -> None:
         self.data[command.name] = command
 
-    def find(self, command_name):
+    def find(self, command_name) -> Command:
         return self.data.get(command_name)
 
     def show_selected(self, selected: list) -> str:
         return '\n'.join([str(self.find(command)) for command in selected])
         
-    def get_all_command_names(self):
+    def get_all_command_names(self) -> list:
         return list(self.data.keys())
 
     def get_close_commands(self, sample_command: str) -> list:
         return get_close_matches(sample_command, self.get_all_command_names(), n=1)
 
-    def get_command_names_by_type(self, cmd_type):
+    def get_command_names_by_type(self, cmd_type) -> list:
         return [cmd_name for cmd_name, cmd in self.data.items() if cmd.cmd_type == cmd_type]
+
+    def get_all_specs(self) -> dict:
+        return {command.name: command.format_spec for command in self.values()}
 
