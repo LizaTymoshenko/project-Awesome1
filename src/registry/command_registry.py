@@ -7,7 +7,7 @@ from difflib import get_close_matches
 from typing import Literal
 
 from address_book.address_book import AddressBook
-from helpers.decorators import input_error
+from helpers.decorators import COMMAND_ERROR_MESSAGE
 from notebook.notes import NoteBook
 
 
@@ -18,6 +18,12 @@ class CommandFormatError(ValueError):
 
 
 @dataclass(frozen=True)
+class CommandResult:
+    success: bool
+    message: str
+
+
+@dataclass(frozen=True)
 class Command:
     name: str
     format_spec: str
@@ -25,20 +31,26 @@ class Command:
     handler: Callable[..., str]
     cmd_type: Literal['address book', 'notebook', 'base', 'help']
 
-    @input_error
-    def execute(self, args, book: AddressBook, notebook: NoteBook, registry: CommandRegistry):
+    def execute(self, args, book: AddressBook, notebook: NoteBook, registry: CommandRegistry) -> CommandResult:
         """Executes the underlying function with the provided arguments."""
+        message = None
         try:
             if self.cmd_type == 'address book':
-                return self.handler(args, book)
+                message = self.handler(args, book)
             elif self.cmd_type == 'notebook':
-                return self.handler(args, notebook)
+                message = self.handler(args, notebook)
             elif self.cmd_type == 'help':
-                return self.handler(registry)
+                message = self.handler(registry)
             elif self.cmd_type == 'base':
-                return self.handler()
+                message = self.handler()
         except CommandFormatError:
-            raise ValueError(f"Correct format: {self.format_spec}")
+            return CommandResult(success=False, message=f"Correct format: {self.format_spec}")
+        except (ValueError, KeyError) as error:
+            return CommandResult(success=False, message=str(error))
+        except Exception:
+            return CommandResult(success=False, message=COMMAND_ERROR_MESSAGE)
+
+        return CommandResult(success=True, message=message)
 
     def __str__(self):
         return f"{self.format_spec}: {self.description}"

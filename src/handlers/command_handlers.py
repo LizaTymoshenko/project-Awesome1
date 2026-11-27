@@ -1,26 +1,29 @@
 from address_book.address_book import AddressBook
 from console.console import render_help_table
+from helpers.decorators import input_error
 from notebook.notes import NoteBook
 from registry.command_registry import CommandRegistry
 
 
-# execute command from the CommandRegistry + find close matches if command if not correct
-def execute_command(command: str, args: list|tuple, book: AddressBook, notebook: NoteBook, registry: CommandRegistry):
+@input_error
+def execute_command(command: str, args: list|tuple, book: AddressBook, notebook: NoteBook, registry: CommandRegistry) -> str:
     cmd = registry.find(command)
-    if cmd:
-        rez = cmd.execute(args, book, notebook, registry)
+    if cmd is None:
         close_commands = show_close_matches(command, args, registry)
-        if command not in close_commands:
-            match_rez = successful_match_response(close_commands, registry)
-            return f"{rez}\n{match_rez}"
-        else:
-            return rez
-    else:
-        close_commands = show_close_matches(command, args, registry) # args for composite command mistypes like add email instead of add-email
         if close_commands:
             return successful_match_response(close_commands, registry)
-        else:
-            return unsuccessful_match_response()
+        return unsuccessful_match_response()
+
+    result = cmd.execute(args, book, notebook, registry)
+    if result.success:
+        return result.message
+
+    close_commands = show_close_matches(command, args, registry)
+    if close_commands and command not in close_commands:
+        suggestion = successful_match_response(close_commands, registry)
+        return f"{result.message}\n{suggestion}"
+
+    return result.message
 
 
 # finds close commands
