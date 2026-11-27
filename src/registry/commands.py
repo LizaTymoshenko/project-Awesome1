@@ -1,20 +1,31 @@
-from command_registry import Command, CommandRegistry
-
-from contact_handlers import (
-    add_contact, change_contact, show_phone, show_all_contacts, add_birthday, 
-    show_birthday, show_upcoming_birthdays, delete_contact, search_contacts,
-    remove_phone
+from handlers.base_handlers import close_bot, hello
+from handlers.command_handlers import show_all_commands
+from handlers.contact_handlers import (
+    add_birthday,
+    add_contact,
+    change_contact,
+    delete_contact,
+    remove_phone,
+    search_contacts,
+    show_all_contacts,
+    show_birthday,
+    show_phone,
+    show_upcoming_birthdays,
 )
-from note_handlers import (
-    add_note, show_notes, search_notes, edit_note, delete_note, 
-    add_tag, remove_tag, search_tag, sort_notes
+from handlers.field_handlers import add_address, add_email, edit_contact
+from handlers.note_handlers import (
+    add_note,
+    add_tag,
+    delete_note,
+    edit_note,
+    remove_tag,
+    search_notes,
+    search_tag,
+    show_notes,
+    sort_notes,
 )
+from registry.command_registry import Command, CommandRegistry
 
-from base_handlers import hello, close_bot
-
-from command_handlers import show_all_commands
-
-from field_handlers import add_address, add_email, edit_contact
 
 def init_registry():
     # Init

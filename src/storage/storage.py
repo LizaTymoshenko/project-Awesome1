@@ -3,8 +3,8 @@ import pickle
 from datetime import datetime
 from pathlib import Path
 
-from address_book import AddressBook
-from notes import NoteBook
+from address_book.address_book import AddressBook
+from notebook.notes import NoteBook
 
 DEFAULT_DATA_FILE = Path.home() / ".personal_assistant" / "assistant.pkl"
 DATA_FILE = DEFAULT_DATA_FILE  # tests point this at a temp folder

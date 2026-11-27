@@ -1,4 +1,3 @@
-from command_registry import CommandRegistry
 
 # exception for planned session end
 class SessionEnd(KeyboardInterrupt):

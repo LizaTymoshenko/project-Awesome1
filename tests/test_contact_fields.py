@@ -1,11 +1,10 @@
 import pickle
 
 import pytest
-
-from address_book import AddressBook, Record
-from command_registry import CommandFormatError
-from contact_handlers import show_all_contacts
-from field_handlers import add_address, add_email, edit_contact
+from address_book.address_book import AddressBook, Record
+from handlers.contact_handlers import show_all_contacts
+from handlers.field_handlers import add_address, add_email, edit_contact
+from registry.command_registry import CommandFormatError
 
 
 @pytest.fixture
@@ -162,7 +161,7 @@ def test_edit_with_missing_arguments_raises_format_error(book):
 # console.render_table is shared by contacts and (later) notes
 
 def test_render_table_shows_title_headers_and_cells():
-    from console import render_table
+    from console.console import render_table
 
     table = render_table(
         "Notes",

@@ -1,5 +1,6 @@
 from collections import UserDict, defaultdict
 
+
 class Note:
     def __init__(self, note_id: int, text: str, tags: list[str] | None = None):
         self.note_id = note_id

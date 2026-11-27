@@ -1,5 +1,5 @@
-from command_registry import Command
-from console import render_help_table, render_welcome
+from console.console import render_help_table, render_welcome
+from registry.command_registry import Command
 
 
 def test_welcome_points_to_help_and_exit():
@@ -47,8 +47,8 @@ def test_commands_with_the_same_description_share_one_row():
 
 
 def test_help_command_shows_the_registered_commands():
-    from command_handlers import show_all_commands
-    from commands import init_registry
+    from handlers.command_handlers import show_all_commands
+    from registry.commands import init_registry
 
     registry = init_registry()
     text = show_all_commands(registry)
@@ -58,7 +58,7 @@ def test_help_command_shows_the_registered_commands():
 
 
 def test_square_brackets_in_text_are_shown_not_treated_as_markup():
-    from console import render_table
+    from console.console import render_table
 
     text = render_table("T", [("Col", "")], [["add [phone number]"]])
 
@@ -66,7 +66,7 @@ def test_square_brackets_in_text_are_shown_not_treated_as_markup():
 
 
 def test_square_brackets_in_the_title_do_not_break_rendering():
-    from console import render_table
+    from console.console import render_table
 
     text = render_table("Search: [/x]", [("Col", "")], [["row"]])
 

@@ -1,7 +1,7 @@
-from command_registry import CommandRegistry
-from notes import NoteBook
-from address_book import AddressBook
-from console import render_help_table
+from address_book.address_book import AddressBook
+from console.console import render_help_table
+from notebook.notes import NoteBook
+from registry.command_registry import CommandRegistry
 
 
 # execute command from the CommandRegistry + find close matches if command if not correct

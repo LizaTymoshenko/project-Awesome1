@@ -2,10 +2,9 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-
-import storage
-from address_book import AddressBook, Record
-from notes import NoteBook
+import storage.storage as storage
+from address_book.address_book import AddressBook, Record
+from notebook.notes import NoteBook
 
 
 @pytest.fixture(autouse=True)

@@ -1,4 +1,4 @@
-# Runtime: те, що потрібно для запуску `python main.py`
+# Runtime: те, що потрібно для запуску `python src/main.py`
 # ТЗ можна здати на чистому print — Rich опційний, але ментори дозволяють
 rich>=13.0
 prompt_toolkit>=3.0

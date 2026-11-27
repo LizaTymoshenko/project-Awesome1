@@ -1,5 +1,5 @@
-from address_book import AddressBook, Record
-from command_registry import CommandFormatError
+from address_book.address_book import AddressBook, Record
+from registry.command_registry import CommandFormatError
 
 
 def add_address(args, book: AddressBook):

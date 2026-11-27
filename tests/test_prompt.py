@@ -1,7 +1,6 @@
+from console.prompt import format_hint
 from prompt_toolkit.completion import NestedCompleter
 from prompt_toolkit.document import Document
-
-from prompt import format_hint
 
 HINTS = {"add": "add [Contact name] [phone number]", "add-email": "add-email [Contact name] [email]", "all": "all"}
 

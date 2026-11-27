@@ -1,9 +1,10 @@
+import calendar
 from collections import UserDict
 from datetime import datetime, timedelta
-import calendar
 
-from console import render_contacts_table
-from validators import validate_email
+from console.console import render_contacts_table
+from helpers.validators import validate_email
+
 
 class Field:
     def __init__(self, value):

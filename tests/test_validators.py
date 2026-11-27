@@ -1,6 +1,5 @@
 import pytest
-
-from validators import validate_email
+from helpers.validators import validate_email
 
 VALID = [
     "bob@mail.com",
