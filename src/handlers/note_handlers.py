@@ -1,6 +1,7 @@
-from notes import Note, NoteBook
-from command_registry import CommandFormatError
-from console import render_notes_table
+from console.console import render_notes_table
+from notebook.notes import Note, NoteBook
+from registry.command_registry import CommandFormatError
+
 
 def _parse_note_id(value: str) -> int:
     try:

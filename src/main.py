@@ -1,16 +1,9 @@
-from storage import save_data, load_data
-from command_handlers import execute_command
-from base_handlers import SessionEnd
-from console import render_welcome
-
-from commands import init_registry
-from prompt import create_command_input
-
-# for MacOS
-try:
-    import readline # parses arrow-up / arrow-down on input in console
-except ImportError:
-    pass
+from console.console import render_welcome
+from console.prompt import create_command_input
+from handlers.base_handlers import SessionEnd
+from handlers.command_handlers import execute_command
+from registry.commands import init_registry
+from storage.storage import load_data, save_data
 
 
 def parse_input(user_input):

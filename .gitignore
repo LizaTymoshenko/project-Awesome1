@@ -8,3 +8,5 @@ __pycache__/
 .personal_assistant/
 *.pkl
 .DS_Store
+pytest.txt
+.pytest_cache/

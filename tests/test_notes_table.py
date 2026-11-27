@@ -1,8 +1,7 @@
 import pytest
-
-from console import render_notes_table
-from note_handlers import search_notes, search_tag, show_notes, sort_notes
-from notes import NoteBook
+from console.console import render_notes_table
+from handlers.note_handlers import search_notes, search_tag, show_notes, sort_notes
+from notebook.notes import NoteBook
 
 
 @pytest.fixture

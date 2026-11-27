@@ -1,6 +1,6 @@
-from address_book import Record, AddressBook
-from command_registry import CommandFormatError
-from console import render_contacts_table
+from address_book.address_book import AddressBook, Record
+from console.console import render_contacts_table
+from registry.command_registry import CommandFormatError
 
 
 # functions layer between the user and the classes

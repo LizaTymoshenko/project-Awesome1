@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from collections import UserDict
-from typing import Callable, Literal
+from collections.abc import Callable
+from dataclasses import dataclass
 from difflib import get_close_matches
+from typing import Literal
 
-from decorators import input_error
-from address_book import AddressBook
-from notes import NoteBook
-
+from address_book.address_book import AddressBook
+from helpers.decorators import input_error
+from notebook.notes import NoteBook
 
 
 # custom exception
