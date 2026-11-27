@@ -39,10 +39,10 @@ def change_contact(args, book):
     record.edit_phone(old_phone, new_phone)
     return "Contact updated"
 
-@input_error
+
 def remove_phone(args, book):
     if len(args) < 2:
-        raise ValueError("Correct format: remove-phone [Contact name] [phone number]")
+        raise CommandFormatError
 
     name, phone, *_ = args
     record = book.find(name)
